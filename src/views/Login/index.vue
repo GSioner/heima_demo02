@@ -55,6 +55,7 @@
             >
           </template>
         </van-field>
+        <!-- 登录按钮 -->
         <div class="loginBtn">
           <van-button
             square
@@ -68,7 +69,7 @@
         </div>
       </van-form>
 
-      <!-- 登录按钮 -->
+      <div><a href="javascript:void(0)" class="txt">隐私条款</a></div>
     </div>
   </div>
 </template>
@@ -154,5 +155,14 @@ export default {
   border-radius: 10px;
   width: 700px;
   border: 0;
+}
+
+.txt{
+  position: absolute;
+  top: 95%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #666666;
+  font-size: 24px;
 }
 </style>
