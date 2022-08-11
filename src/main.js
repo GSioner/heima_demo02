@@ -6,6 +6,8 @@ import 'amfe-flexible'
 import Vant from 'vant'
 import 'vant/lib/index.css'
 import 'vant/lib/index.less'
+import '@/assets/font_3578437_m23fbebohko/iconfont.css'
+import '@/style/reset.css'
 
 Vue.use(Vant)
 
