@@ -9,6 +9,7 @@ const newsAxios = theAxios.create({
 // theAxios.interceptors.request.use(
 //   function (config) {
 //     // 在发送请求之前做些什么
+//     console.log(config)
 //     return config
 //   },
 //   function (error) {

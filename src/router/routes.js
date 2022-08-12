@@ -1,7 +1,7 @@
 export default [
   {
     path: '/',
-    redirect: '/home/personelcenter'
+    redirect: '/home/usercenter'
   },
   {
     path: '/home',
@@ -9,7 +9,7 @@ export default [
     component: () => import('@/views/Home'),
     children: [
       {
-        path: 'personelcenter',
+        path: 'usercenter',
         name: 'usercenter',
         component: () => import('@/views/PersonelCenter')
       }

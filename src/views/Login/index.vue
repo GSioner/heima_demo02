@@ -1,5 +1,17 @@
 <template>
   <div class="main">
+    <!-- 短信验证提示 -->
+    <van-notice-bar
+      class="topMsg"
+      v-show="messageCode"
+      wrapable
+      :scrollable="false"
+      background="#ffffffb8"
+      color="#272727"
+      text="【黑马头条】 您的验证码 246810，该验证码5分钟内有效，请勿泄漏于他人！"
+    />
+
+    <!-- 顶部登录蓝色盒子 -->
     <div class="topBar">
       <div class="box">登录</div>
     </div>
@@ -47,11 +59,16 @@
             class="btn"
             native-type="submit"
             @click.prevent="putAuthCode"
-            >
-            <span v-if="countDown">获取验证码</span>
-            <van-count-down :time="1000*5" format="ss s" v-else @finish="finish" :style="{color: '#9f9f9f'}"/>
-            </van-button
           >
+            <span v-if="countDown">获取验证码</span>
+            <van-count-down
+              :time="1000 * 5"
+              format="ss s"
+              v-else
+              @finish="finish"
+              :style="{ color: '#9f9f9f' }"
+            />
+          </van-button>
         </van-field>
         <!-- 登录按钮 -->
         <div class="loginBtn">
@@ -108,7 +125,8 @@ export default {
         ]
       },
       show: false,
-      countDown: true
+      countDown: true,
+      messageCode: false
     }
   },
   methods: {
@@ -129,7 +147,7 @@ export default {
           this.$toast.success('登录成功！')
           // ^ --- 清空输入框
           this.userData = {}
-          this.$router.push('/home/personelcenter')
+          this.$router.push('/home/usercenter')
           clearTimeout(time)
         }, 1000)
       } catch (err) {
@@ -154,14 +172,27 @@ export default {
     },
     finish() {
       this.$toast.success('验证码已收到!')
+      this.messageCode = true
       this.countDown = true
-      this.userData.code = 246810
+      const timeId = setTimeout(() => {
+        this.messageCode = false
+        this.userData.code = 246810
+        clearTimeout(timeId)
+      }, 3000)
     }
   }
 }
 </script>
 
 <style scoped lang="less">
+.topMsg {
+  border: 1px solid black;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  height: 70px;
+}
 .topBar {
   background-color: #3296fa;
   width: 100%;

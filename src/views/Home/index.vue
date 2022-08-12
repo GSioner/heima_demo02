@@ -3,8 +3,12 @@
     <!-- APP展示各模块内容区域 -->
     <router-view></router-view>
     <!-- 底部切换按钮 -->
-    <div class="footerBtn">
-      <p class="tag" @click="toHomeView">
+    <div class="footerBtn" @load="changeIcon">
+      <p
+        class="tag"
+        @click="changeRouteURL"
+        :class="{ active: iconColor === 'homeview' }"
+      >
         <van-icon
           class-prefix="icon-shouye iconfont"
           name="Home"
@@ -12,7 +16,11 @@
         />
         <span>首页</span>
       </p>
-      <p class="tag" @click="toQuestion">
+      <p
+        class="tag"
+        @click="changeRouteURL"
+        :class="{ active: iconColor === 'question' }"
+      >
         <van-icon
           class-prefix="icon-wenda iconfont"
           name="Question"
@@ -20,15 +28,23 @@
         />
         <span>问答</span>
       </p>
-      <p class="tag" @click="toVideo">
+      <p
+        class="tag"
+        @click="changeRouteURL"
+        :class="{ active: iconColor === 'videomodel' }"
+      >
         <van-icon
           class-prefix="iconfont icon-shipin"
-          name="Video"
+          name="videoModel"
           size=".6rem"
         />
         <span>视频</span>
       </p>
-      <p class="tag" @click="toUserCenter">
+      <p
+        class="tag"
+        @click="changeRouteURL"
+        :class="{ active: iconColor === 'usercenter' }"
+      >
         <van-icon class-prefix="iconfont icon-wode" name="My" size=".6rem" />
         <span>我的</span>
       </p>
@@ -39,20 +55,24 @@
 <script>
 export default {
   name: 'HomeModel',
+  data() {
+    return {
+      iconColor: ''
+    }
+  },
   methods: {
     // ^ --- 底部按钮跳转链接
-    toHomeView() {
-      this.$router.push('/home/personelcenter')
+    changeRouteURL() {
+      const url = this.$route.name
+      this.$router.push(`/home/${url}`)
+      this.iconColor = url
     },
-    toQuestion() {
-      this.$router.push('/home/personelcenter')
-    },
-    toVideo() {
-      this.$router.push('/home/personelcenter')
-    },
-    toUserCenter() {
-      this.$router.push('/home/personelcenter')
+    changeIcon() {
+      this.iconColor = this.$route.name
     }
+  },
+  created() {
+    this.changeIcon()
   }
 }
 </script>
@@ -84,5 +104,10 @@ export default {
       margin-top: 5px;
     }
   }
+}
+
+// ^ --- 底部按钮激活样式
+.active {
+  color: #3d9cfa;
 }
 </style>

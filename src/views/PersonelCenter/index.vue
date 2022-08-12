@@ -70,7 +70,9 @@
       <van-cell title="小智同学" is-link to="/" />
     </div>
 
-    <div class="logout" @click.prevent="Logout">退出登录</div>
+    <div class="logout" @click.prevent="Logout" v-show="logoutBtn">
+      退出登录
+    </div>
   </div>
 </template>
 
@@ -80,14 +82,26 @@ export default {
   name: 'UserCenterModel',
   data() {
     return {
-      show: false
+      show: false,
+      logoutBtn: true
     }
   },
   methods: {
     // ^ --- 敲击登出按钮清除token并跳转登录页面
     Logout() {
-      removeToken('heima_Token')
-      this.$router.push('/login')
+      // * --- 调用Dialog组件执行退出登录选项卡.then()代表敲击确认的反馈动作
+      this.$dialog
+        .confirm({
+          title: '退户确认',
+          message: '退出当前头条账号，将不能同步收藏、发布评论和云端分享等',
+          confirmButtonColor: '#3598ff'
+        })
+        .then(() => {
+          removeToken('heima_Token')
+          this.show = false
+          this.logoutBtn = false
+        })
+        .catch(() => console.log('用户已取消退出登录操作！'))
     },
     checkToken() {
       this.show = !!getToken('heima_Token')
@@ -95,8 +109,6 @@ export default {
   },
   created() {
     this.checkToken()
-    console.log(getToken('heima_Token'))
-    console.log(this.show)
   }
 }
 </script>
