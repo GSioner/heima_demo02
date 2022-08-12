@@ -1,0 +1,252 @@
+<template>
+  <div class="main" @load="checkToken">
+    <!-- 顶部背景盒子/个人信息栏 -->
+    <div class="topBar" v-if="show">
+      <!-- 上层个人资料栏 -->
+      <div class="userPhoto">
+        <!-- 左侧用户头像名称 -->
+        <div class="left">
+          <van-image
+            class="user_pic"
+            round
+            width="1.8rem"
+            height="1.8rem"
+            src="https://img01.yzcdn.cn/vant/cat.jpeg"
+          />
+          <div class="username">黑马头条号</div>
+        </div>
+        <!-- 右侧编辑资料按钮 -->
+        <div class="right">
+          <van-button type="default" class="userBtn" round>编辑资料</van-button>
+        </div>
+      </div>
+
+      <!-- 下层用户数据栏 -->
+      <div class="userData">
+        <p class="tag">
+          <span>8</span>
+          <span>头条</span>
+        </p>
+        <p class="tag">
+          <span>66</span>
+          <span>关注</span>
+        </p>
+        <p class="tag">
+          <span>88</span>
+          <span>粉丝</span>
+        </p>
+        <p class="tag">
+          <span>88</span>
+          <span>获赞</span>
+        </p>
+      </div>
+    </div>
+    <div class="topBarNotAllow" v-else>
+      <div class="userImg">
+        <van-icon
+          class-prefix="iconfont icon-phone"
+          name="extra"
+          class="picture"
+        />
+      </div>
+      <p @click="$router.push('/login')" class="loginBtn">登录 / 注册</p>
+    </div>
+
+    <!-- 收藏/历史栏 -->
+    <div class="collection">
+      <p class="tags">
+        <van-icon name="star-o" color="#ef7a7b" size=".6667rem" />
+        <span>收藏</span>
+      </p>
+      <p class="tags">
+        <van-icon name="clock-o" color="#ffb75c" size=".6667rem" />
+        <span>历史</span>
+      </p>
+    </div>
+
+    <!-- 消息通知/小智同学 -->
+    <div class="msgURL">
+      <van-cell title="消息通知" is-link to="/" />
+      <van-cell title="小智同学" is-link to="/" />
+    </div>
+
+    <div class="logout" @click.prevent="Logout">退出登录</div>
+  </div>
+</template>
+
+<script>
+import { removeToken, getToken } from '@/utils/Token.js'
+export default {
+  name: 'UserCenterModel',
+  data() {
+    return {
+      show: false
+    }
+  },
+  methods: {
+    // ^ --- 敲击登出按钮清除token并跳转登录页面
+    Logout() {
+      removeToken('heima_Token')
+      this.$router.push('/login')
+    },
+    checkToken() {
+      this.show = !!getToken('heima_Token')
+    }
+  },
+  created() {
+    this.checkToken()
+    console.log(getToken('heima_Token'))
+    console.log(this.show)
+  }
+}
+</script>
+
+<style scoped lang="less">
+// (// ^ ---) 此为插件---切换不同注释颜色---插件名：Colorful Comments
+// ^ -- 模块背景盒子
+.main {
+  width: 100%;
+  height: 100vh;
+  background-color: #f5f7f9;
+}
+
+// ^ --- 顶部用户资料栏(已登录)
+.topBar {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  height: 360px;
+  width: 100%;
+  background-image: url('@/assets/images/banner.png');
+  background-size: contain;
+
+  .userPhoto {
+    box-sizing: border-box;
+    padding: 0 30px;
+    height: 150px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .left {
+      display: flex;
+
+      .user_pic {
+        border: 1px solid white;
+        margin: 7.5px 0;
+        margin-right: 22px;
+      }
+
+      .username {
+        line-height: 150px;
+        height: 100%;
+        color: white;
+        font-size: 30px;
+      }
+    }
+
+    .right {
+      .userBtn {
+        padding: 0 20px;
+        height: 40px;
+        font-size: 20px;
+        color: #989898;
+      }
+    }
+  }
+
+  .userData {
+    box-sizing: border-box;
+    height: 135px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 100px;
+
+    .tag {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: white;
+      font-size: 26px;
+    }
+  }
+}
+
+// ^ --- 顶部用户资料栏(未登录)
+.topBarNotAllow {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  height: 360px;
+  width: 100%;
+  background-image: url('@/assets/images/banner.png');
+  background-size: contain;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .userImg {
+    height: 130px;
+    width: 130px;
+    background-color: #fff;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 15px;
+
+    .picture {
+      font-size: 80px;
+      color: #1e86fc;
+    }
+  }
+
+  .loginBtn {
+    letter-spacing: 5px;
+    color: white;
+    font-size: 28px;
+  }
+}
+
+// ^ --- 收藏/历史栏
+.collection {
+  height: 140px;
+  width: 100%;
+  background-color: #fff;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+
+  .tags {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    letter-spacing: 10px;
+
+    span {
+      margin-top: 10px;
+      font-size: 27px;
+    }
+  }
+}
+
+// ^ --- 消息通知/小智同学
+.msgURL {
+  margin: 10px 0;
+}
+
+// ^ --- 退出登录
+.logout {
+  color: #d86262;
+  height: 105px;
+  width: 100%;
+  background-color: #fff;
+  text-align: center;
+  line-height: 105px;
+  font-size: 29px;
+}
+</style>

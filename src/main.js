@@ -6,12 +6,14 @@ import 'amfe-flexible'
 import Vant from 'vant'
 import 'vant/lib/index.css'
 import 'vant/lib/index.less'
-import '@/assets/font_3578437_m23fbebohko/iconfont.css'
+import '@/assets/font_3578437_hfi1c416j2f/iconfont.css'
 import '@/style/reset.css'
+import notify from '@/utils/notify.js'
 
 Vue.use(Vant)
 
 Vue.config.productionTip = false
+Vue.prototype.$notify = notify
 
 new Vue({
   router,

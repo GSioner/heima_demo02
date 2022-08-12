@@ -1,11 +1,11 @@
-export const setToken = (data) => {
-  localStorage.setItem('heima_Token', data)
+export const setToken = (token, data) => {
+  return localStorage.setItem(token, data)
 }
 
-export const getToken = () => {
-  localStorage.getToken('heima_Token')
+export const getToken = (token) => {
+  return localStorage.getItem(token)
 }
 
-export const removeToken = () => {
-  localStorage.removeItem('heima_Token')
+export const removeToken = (token) => {
+  return localStorage.removeItem(token)
 }

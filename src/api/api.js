@@ -1,7 +1,7 @@
-import axios from './axios.js'
+import { requestNews } from './axios/requestNews.js'
 
 export const userLogin = ({ data }) => {
-  return axios({
+  return requestNews({
     url: '/v1_0/authorizations',
     method: 'POST',
     data

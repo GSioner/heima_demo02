@@ -1,7 +1,23 @@
 export default [
   {
     path: '/',
-    name: 'Login',
-    component: () => import('@/views/Login/index.vue')
+    redirect: '/home/personelcenter'
+  },
+  {
+    path: '/home',
+    name: 'home',
+    component: () => import('@/views/Home'),
+    children: [
+      {
+        path: 'personelcenter',
+        name: 'usercenter',
+        component: () => import('@/views/PersonelCenter')
+      }
+    ]
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: () => import('@/views/Login')
   }
 ]
