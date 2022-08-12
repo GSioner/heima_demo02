@@ -7,3 +7,9 @@ export const userLogin = ({ data }) => {
     data
   })
 }
+
+export const getUserInfo = () => {
+  return requestNews({
+    url: '/v1_0/user'
+  })
+}

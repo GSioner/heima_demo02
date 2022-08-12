@@ -11,9 +11,9 @@
             round
             width="1.8rem"
             height="1.8rem"
-            src="https://img01.yzcdn.cn/vant/cat.jpeg"
+            :src="userInfo.photo"
           />
-          <div class="username">黑马头条号</div>
+          <div class="username">{{userInfo.name}}</div>
         </div>
         <!-- 右侧编辑资料按钮 -->
         <div class="right">
@@ -24,19 +24,19 @@
       <!-- 下层用户数据栏 -->
       <div class="userData">
         <p class="tag">
-          <span>8</span>
+          <span>{{userInfo.art_count}}</span>
           <span>头条</span>
         </p>
         <p class="tag">
-          <span>66</span>
+          <span>{{userInfo.follow_count}}</span>
           <span>关注</span>
         </p>
         <p class="tag">
-          <span>88</span>
+          <span>{{userInfo.fans_count}}</span>
           <span>粉丝</span>
         </p>
         <p class="tag">
-          <span>88</span>
+          <span>{{userInfo.like_count}}</span>
           <span>获赞</span>
         </p>
       </div>
@@ -86,6 +86,11 @@ export default {
       logoutBtn: true
     }
   },
+  computed: {
+    userInfo() {
+      return this.$store.state.userInfo.userMessage
+    }
+  },
   methods: {
     // ^ --- 敲击登出按钮清除token并跳转登录页面
     Logout() {
@@ -107,8 +112,10 @@ export default {
       this.show = !!getToken('heima_Token')
     }
   },
-  created() {
+  async created() {
     this.checkToken()
+    await this.$store.dispatch('userInfo/GET_USER_INOFMATION_ACTION')
+    console.log(this.userInfo)
   }
 }
 </script>
