@@ -3,16 +3,14 @@ import { getToken } from '@/utils/Token.js'
 
 const newsAxios = theAxios.create({
   baseURL: 'http://geek.itheima.net',
-  timeout: 2000
+  timeout: 60000
 })
 
 // 添加请求拦截器
 newsAxios.interceptors.request.use(
   function (config) {
     // 在发送请求之前做些什么
-    config.headers = {
-      Authorization: `Bearer ${getToken('heima_Token')}`
-    }
+    config.headers.Authorization = `Bearer ${getToken('heima_Token')}`
     return config
   },
   function (error) {
