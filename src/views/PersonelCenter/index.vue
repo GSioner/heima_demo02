@@ -13,7 +13,7 @@
             height="1.8rem"
             :src="userInfo.photo"
           />
-          <div class="username">{{userInfo.name}}</div>
+          <div class="username">{{ userInfo.name }}</div>
         </div>
         <!-- 右侧编辑资料按钮 -->
         <div class="right">
@@ -24,19 +24,19 @@
       <!-- 下层用户数据栏 -->
       <div class="userData">
         <p class="tag">
-          <span>{{userInfo.art_count}}</span>
+          <span>{{ userInfo.art_count }}</span>
           <span>头条</span>
         </p>
         <p class="tag">
-          <span>{{userInfo.follow_count}}</span>
+          <span>{{ userInfo.follow_count }}</span>
           <span>关注</span>
         </p>
         <p class="tag">
-          <span>{{userInfo.fans_count}}</span>
+          <span>{{ userInfo.fans_count }}</span>
           <span>粉丝</span>
         </p>
         <p class="tag">
-          <span>{{userInfo.like_count}}</span>
+          <span>{{ userInfo.like_count }}</span>
           <span>获赞</span>
         </p>
       </div>
@@ -70,6 +70,7 @@
       <van-cell title="小智同学" is-link to="/" />
     </div>
 
+    <!-- 登出按钮 -->
     <div class="logout" @click.prevent="Logout" v-show="logoutBtn">
       退出登录
     </div>
@@ -87,11 +88,18 @@ export default {
     }
   },
   computed: {
+    // ^ --- 获取vuex的用户信息state属性
     userInfo() {
       return this.$store.state.userInfo.userMessage
     }
   },
   methods: {
+    // ^ --- 封装登出函数
+    logoutFn() {
+      removeToken('heima_Token')
+      this.show = false
+      this.logoutBtn = false
+    },
     // ^ --- 敲击登出按钮清除token并跳转登录页面
     Logout() {
       // * --- 调用Dialog组件执行退出登录选项卡.then()代表敲击确认的反馈动作
@@ -101,11 +109,7 @@ export default {
           message: '退出当前头条账号，将不能同步收藏、发布评论和云端分享等',
           confirmButtonColor: '#3598ff'
         })
-        .then(() => {
-          removeToken('heima_Token')
-          this.show = false
-          this.logoutBtn = false
-        })
+        .then(() => this.logoutFn())
         .catch(() => console.log('用户已取消退出登录操作！'))
     },
     checkToken() {
@@ -113,9 +117,13 @@ export default {
     }
   },
   async created() {
+    // ^ --- 验证用户信息是否超时并调用用户信息
     this.checkToken()
-    await this.$store.dispatch('userInfo/GET_USER_INOFMATION_ACTION')
-    console.log(this.userInfo)
+    try {
+      await this.$store.dispatch('userInfo/GET_USER_INOFMATION_ACTION')
+    } catch (err) {
+      if (err.response.status === 401) this.logoutFn()
+    }
   }
 }
 </script>
