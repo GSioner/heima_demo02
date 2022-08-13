@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import userInfo from './userInfo.js'
+import channel from './channel.js'
 
 Vue.use(Vuex)
 
@@ -10,6 +11,7 @@ export default new Vuex.Store({
   mutations: {},
   actions: {},
   modules: {
-    userInfo
+    userInfo,
+    channel
   }
 })

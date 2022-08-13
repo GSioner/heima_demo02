@@ -13,3 +13,9 @@ export const getUserInfo = () => {
     url: '/v1_0/user'
   })
 }
+
+export const userChannle = () => {
+  return requestNews({
+    url: '/v1_0/user/channels'
+  })
+}

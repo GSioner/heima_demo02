@@ -6,7 +6,7 @@
     <div class="footerBtn" @load="changeIcon">
       <p
         class="tag"
-        @click="changeRouteURL"
+        @click="changeRouteURL('homeview')"
         :class="{ active: iconColor === 'homeview' }"
       >
         <van-icon
@@ -18,7 +18,7 @@
       </p>
       <p
         class="tag"
-        @click="changeRouteURL"
+        @click="changeRouteURL('question')"
         :class="{ active: iconColor === 'question' }"
       >
         <van-icon
@@ -30,7 +30,7 @@
       </p>
       <p
         class="tag"
-        @click="changeRouteURL"
+        @click="changeRouteURL('videomodel')"
         :class="{ active: iconColor === 'videomodel' }"
       >
         <van-icon
@@ -42,7 +42,7 @@
       </p>
       <p
         class="tag"
-        @click="changeRouteURL"
+        @click="changeRouteURL('usercenter')"
         :class="{ active: iconColor === 'usercenter' }"
       >
         <van-icon class-prefix="iconfont icon-wode" name="My" size=".6rem" />
@@ -62,8 +62,7 @@ export default {
   },
   methods: {
     // ^ --- 底部按钮跳转链接
-    changeRouteURL() {
-      const url = this.$route.name
+    changeRouteURL(url) {
       this.$router.push(`/home/${url}`)
       this.iconColor = url
     },
