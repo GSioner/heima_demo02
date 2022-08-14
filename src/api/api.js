@@ -42,3 +42,9 @@ export const reportArticle = (data) => {
     data
   })
 }
+
+export const getAllChannel = (data) => {
+  return requestNews({
+    url: '/v1_0/channels'
+  })
+}

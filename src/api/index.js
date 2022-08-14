@@ -4,7 +4,8 @@ import {
   userChannle,
   getAritcle,
   feedBack,
-  reportArticle
+  reportArticle,
+  getAllChannel
 } from './api.js'
 
 export const userLoginAPI = userLogin
@@ -18,3 +19,5 @@ export const getAritcleAPI = getAritcle
 export const feedBackAPI = feedBack
 
 export const reportArticleAPI = reportArticle
+
+export const getAllChannelAPI = getAllChannel

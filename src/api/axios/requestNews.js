@@ -1,5 +1,6 @@
 import theAxios from 'axios'
-import { getToken } from '@/utils/Token.js'
+import { getToken, setToken } from '@/utils/Token.js'
+import router from '@/router'
 
 const newsAxios = theAxios.create({
   baseURL: 'http://geek.itheima.net',
@@ -27,10 +28,27 @@ newsAxios.interceptors.response.use(
     // 对响应数据做点什么
     return response
   },
-  function (error) {
-    // 超出 2xx 范围的状态码都会触发该函数。
-    // 对响应错误做点什么
-    return Promise.reject(error)
+  async function (error) {
+    if (error.response && error.response.status === 401) {
+      if (!getToken('heima_Token')) {
+        return Promise.reject(error)
+      }
+      try {
+        const res = await theAxios({
+          url: 'http://geek.itheima.net/v1_0/authorizations',
+          method: 'PUT',
+          headers: {
+            Authorization: `Bearer ${getToken('heima_reToken')}`
+          }
+        })
+        setToken('heima_Token', res.data.data.token)
+        return newsAxios(error.config)
+      } catch (err) {
+        router.push('/login')
+      }
+    } else {
+      return Promise.reject(error)
+    }
   }
 )
 

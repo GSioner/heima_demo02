@@ -19,20 +19,24 @@
           class-prefix="my-icon"
           name="extra"
           class="iconfont icon-gengduo"
+          @click="showPopup"
         />
       </div>
+      <!-- 频道筛选区 -->
+      <van-popup v-model="show" get-container="body">
+        <ChannelIconMore @outMaskCover="outMaskCover" @changeTags="changeTags"></ChannelIconMore>
+      </van-popup>
       <!-- 顶部滑动栏 -->
-      <van-tabs v-model="active" swipeable animated>
+      <van-tabs v-model="activeName" swipeable animated>
         <van-tab
           v-for="k in userChannel"
           :title="k.name"
           :key="k.id"
-          name="k.id"
+          :name="k.id"
         >
           <!-- 组件 --- 内容模块列表 -->
           <Content :artId="k.id"></Content>
           <!-- 组件 --- 内容模块列表 -->
-
         </van-tab>
       </van-tabs>
     </div>
@@ -40,15 +44,18 @@
 </template>
 
 <script>
+import ChannelIconMore from '@/components/ContentCellTags.vue'
 import Content from '@/components/Content.vue'
 export default {
   components: {
-    Content
+    Content,
+    ChannelIconMore
   },
   data() {
     return {
       searchVal: '',
-      active: 2
+      activeName: 0,
+      show: false
     }
   },
   computed: {
@@ -58,6 +65,17 @@ export default {
   },
   async created() {
     await this.$store.dispatch('channel/GET_USER_CHANNEL_ACTION')
+  },
+  methods: {
+    showPopup() {
+      this.show = true
+    },
+    outMaskCover(bool) {
+      this.show = bool
+    },
+    changeTags(id) {
+      this.activeName = id
+    }
   }
 }
 </script>

@@ -57,16 +57,16 @@
     </div>
 
     <!-- 收藏/历史栏 -->
-    <div class="collection">
-      <p class="tags">
+    <van-grid column-num="2" class="collection" clickable>
+      <van-grid-item class="tags">
         <van-icon name="star-o" color="#ef7a7b" size=".6667rem" />
         <span>收藏</span>
-      </p>
-      <p class="tags">
+      </van-grid-item>
+      <van-grid-item class="tags">
         <van-icon name="clock-o" color="#ffb75c" size=".6667rem" />
         <span>历史</span>
-      </p>
-    </div>
+      </van-grid-item>
+    </van-grid>
 
     <!-- 消息通知/小智同学 -->
     <div class="msgURL">
@@ -106,7 +106,7 @@ export default {
     },
     // ^ --- 敲击登出按钮清除token并跳转登录页面
     Logout() {
-      // * --- 调用Dialog组件执行退出登录选项卡.then()代表敲击确认的反馈动作
+      // * --- 调用Dialog组件执行退出登录选项卡.then()代表敲击确认的反馈动作.catch()代表取消退出
       this.$dialog
         .confirm({
           title: '退户确认',
@@ -244,24 +244,9 @@ export default {
 
 // ^ --- 收藏/历史栏
 .collection {
-  height: 140px;
-  width: 100%;
-  background-color: #fff;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-
-  .tags {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-    letter-spacing: 10px;
-
-    span {
-      margin-top: 10px;
-      font-size: 27px;
-    }
+  span {
+    margin-top: 10px;
+    font-size: 27px;
   }
 }
 

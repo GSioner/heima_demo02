@@ -14,6 +14,7 @@
     <!-- 顶部登录蓝色盒子 -->
     <div class="topBar">
       <div class="box">登录</div>
+      <van-icon name="cross" class="closeIcon" @click="backIcon" />
     </div>
 
     <div class="login">
@@ -70,6 +71,7 @@
             />
           </van-button>
         </van-field>
+
         <!-- 登录按钮 -->
         <div class="loginBtn">
           <van-button
@@ -130,6 +132,16 @@ export default {
     }
   },
   methods: {
+    // ^ --- 回退按钮(×形状按钮)
+    backIcon() {
+      if (this.$route.query.backpage) {
+        this.$router.push(this.$route.query.backpage)
+      } else if (this.$router.fallback) {
+        this.$router.back()
+      } else {
+        this.$router.push('/home/usercenter')
+      }
+    },
     // ^ --- 验证个人信息是否可用
     async login() {
       // ^ --- 给予用户操作反馈
@@ -142,12 +154,13 @@ export default {
         const res = await userLoginAPI({ data: this.userData })
         // ^ --- 存储Token密钥至本地
         setToken('heima_Token', res.data.data.token)
+        setToken('heima_reToken', res.data.data.refresh_token)
         // ^ --- 登录成功提示出现后延迟跳转其他页面（目前暂时跳转个人中心）
         const time = setTimeout(() => {
           this.$toast.success('登录成功！')
           // ^ --- 清空输入框
           this.userData = {}
-          this.$router.push('/home/usercenter')
+          this.backIcon()
           clearTimeout(time)
         }, 1000)
       } catch (err) {
@@ -185,6 +198,13 @@ export default {
 </script>
 
 <style scoped lang="less">
+.main {
+  height: 100vh;
+  background-color: #f5f7f9;
+  position: relative;
+}
+
+// ^ --- 短信验证码
 .topMsg {
   border: 1px solid black;
   position: fixed;
@@ -193,18 +213,56 @@ export default {
   z-index: 9999;
   height: 70px;
 }
+
+// ^ --- 顶部蓝色盒子
 .topBar {
   background-color: #3296fa;
   width: 100%;
   height: 96px;
   font-size: 31px;
+  position: relative;
 
   .box {
     color: white;
     line-height: 96px;
     text-align: center;
   }
+
+  .closeIcon {
+    position: absolute;
+    left: 2%;
+    top: 30%;
+    font-size: 40px;
+    color: white;
+  }
 }
+
+// ^ --- 登录按钮
+.loginBtn {
+  margin: 0 auto;
+  margin-top: 53px;
+  width: 700px;
+}
+
+// ^ --- 验证码按钮
+.btn {
+  background-color: #ededed;
+  color: #9f9f9f;
+  border: 1px solid #ededed;
+  height: 46px;
+}
+
+// ^ --- 隐私条款栏
+.txt {
+  position: absolute;
+  top: 95%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #666666;
+  font-size: 25px;
+}
+
+// ^ --- 定制样式
 .icon-yanzhengma {
   line-height: 44px;
 }
@@ -219,33 +277,9 @@ export default {
   height: 35px;
   background-size: cover;
 }
-.btn {
-  background-color: #ededed;
-  color: #9f9f9f;
-  border: 1px solid #ededed;
-  height: 46px;
-}
-.main {
-  height: 100vh;
-  background-color: #f5f7f9;
-}
-.loginBtn {
-  margin: 0 auto;
-  margin-top: 53px;
-  width: 700px;
-}
 /deep/ .van-button--square {
   border-radius: 10px;
   width: 700px;
   border: 0;
-}
-
-.txt {
-  position: absolute;
-  top: 95%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  color: #666666;
-  font-size: 25px;
 }
 </style>
