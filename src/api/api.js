@@ -20,9 +20,9 @@ export const userChannle = () => {
   })
 }
 
-export const getAritcle = ({ data }) => {
+export const getAritcle = (data) => {
   return requestNews({
     url: '/v1_0/articles',
-    data: data
+    data
   })
 }

@@ -10,7 +10,6 @@ const newsAxios = theAxios.create({
 newsAxios.interceptors.request.use(
   function (config) {
     // 在发送请求之前做些什么
-    console.log(config)
     config.headers.Authorization = `Bearer ${getToken('heima_Token')}`
     return config
   },
@@ -45,7 +44,7 @@ export const requestNews = ({
     url,
     method,
     data: method === 'GET' ? {} : data,
-    param: method === 'GET' ? data : {},
+    params: method === 'GET' ? data : {},
     headers
   })
 }

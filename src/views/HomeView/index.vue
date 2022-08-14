@@ -29,8 +29,10 @@
           :key="k.id"
           name="k.id"
         >
-          <!-- 内容区块列表模块 -->
+          <!-- 组件 --- 内容模块列表 -->
           <Content :artId="k.id"></Content>
+          <!-- 组件 --- 内容模块列表 -->
+
         </van-tab>
       </van-tabs>
     </div>
@@ -56,16 +58,11 @@ export default {
   },
   async created() {
     await this.$store.dispatch('channel/GET_USER_CHANNEL_ACTION')
-    console.log(this.userChannel)
   }
 }
 </script>
 
 <style scoped lang="less">
-// ^ --- 通用样式
-.red {
-  color: #ef7a7a;
-}
 // ^ --- 顶部样式/搜索框样式
 .topBar {
   height: 100px;
@@ -138,7 +135,7 @@ export default {
     z-index: 9999;
     position: absolute;
     right: 0;
-    top: 1%;
+    top: 0;
 
     .icon-gengduo {
       font-size: 45px;

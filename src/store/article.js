@@ -12,7 +12,7 @@ export default {
   actions: {
     async GET_ARTICLE_INFOMATION_ACTION(action, data) {
       const res = await getAritcleAPI(data)
-      console.log('res: ', res)
+      return res
     }
   },
   getters: {},
