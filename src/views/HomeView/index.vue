@@ -132,7 +132,7 @@ export default {
     width: 80px;
     height: 80px;
     background-color: #fff;
-    z-index: 9999;
+    z-index: 998;
     position: absolute;
     right: 0;
     top: 0;

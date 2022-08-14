@@ -32,7 +32,7 @@
               <span class="tag">{{ time }}年之前</span>
             </p>
             <!-- 组件 --- 不感兴趣按钮 -->
-            <UnlikeBtn />
+            <UnlikeBtn :id="dataList.art_id" />
             <!-- 组件 --- 不感兴趣按钮 -->
           </div>
         </template>
@@ -46,6 +46,7 @@ import dayjs from '@/utils/dayjs.js'
 import UnlikeBtn from '@/components/UnlikeBtn.vue'
 
 export default {
+  name: 'HomeView-Content-Model',
   components: {
     UnlikeBtn
   },

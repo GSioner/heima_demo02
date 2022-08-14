@@ -29,6 +29,7 @@
 <script>
 import ContentCell from './ContentCell.vue'
 export default {
+  name: 'HomeView-List-Model',
   components: {
     ContentCell
   },

@@ -26,3 +26,19 @@ export const getAritcle = (data) => {
     data
   })
 }
+
+export const feedBack = (data) => {
+  return requestNews({
+    url: '/v1_0/article/dislikes',
+    method: 'POST',
+    data
+  })
+}
+
+export const reportArticle = (data) => {
+  return requestNews({
+    url: '/v1_0/article/reports',
+    method: 'POST',
+    data
+  })
+}

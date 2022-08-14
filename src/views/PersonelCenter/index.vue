@@ -12,7 +12,11 @@
             width="1.8rem"
             height="1.8rem"
             :src="userInfo.photo"
-          />
+            ><template v-slot:loading>
+              <van-loading type="spinner" size="20" />
+            </template>
+            <template v-slot:error>加载失败</template>
+          </van-image>
           <div class="username">{{ userInfo.name }}</div>
         </div>
         <!-- 右侧编辑资料按钮 -->
