@@ -19,3 +19,10 @@ export const userChannle = () => {
     url: '/v1_0/user/channels'
   })
 }
+
+export const getAritcle = ({ data }) => {
+  return requestNews({
+    url: '/v1_0/articles',
+    data: data
+  })
+}

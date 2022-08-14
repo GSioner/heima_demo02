@@ -13,7 +13,7 @@ router.beforeEach((to, from, next) => {
   // console.log(to.name)
   // console.log(from.name)
   // console.log(!!getToken('heima_Token'))
-  if (to.name === 'login' || !!getToken('heima_Token')) {
+  if (to.name === 'login' || !!getToken('heima_Token' || from.name === 'login')) {
     history.pushState(null, null, document.URL)
     window.addEventListener('popstate', function () {
       history.pushState(null, null, document.URL)
