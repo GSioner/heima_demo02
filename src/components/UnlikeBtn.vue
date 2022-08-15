@@ -56,7 +56,8 @@ export default {
         })
         return this.$toast.success('反馈成功！')
       } catch (err) {
-        if (err.response.status === 401) this.$notify.warning('请先登录')
+        if (err.response.status === 401) this.$toast.fail('请先登录')
+        this.$router.push('/login')
       }
     },
     onCancel() {
@@ -73,14 +74,14 @@ export default {
       this.cancel = '取消'
     },
     async clickBtn(e) {
-      console.log(e)
       // ^ --- 不感兴趣按钮反馈
       if (e.name === '不感兴趣') {
         try {
           await feedBackAPI({ target: this.id })
           return this.$toast.success('反馈成功！')
         } catch (err) {
-          if (err.response.status === 401) this.$notify.warning('请先登录')
+          if (err.response.status === 401) this.$toast.fail('请先登录')
+          this.$router.push('/login')
         }
       }
       // ^ --- 垃圾内容反馈

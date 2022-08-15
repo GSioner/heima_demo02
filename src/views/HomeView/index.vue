@@ -1,38 +1,54 @@
 <template>
   <div>
     <!-- 顶部搜索栏 -->
-    <div class="topBar">
-      <input type="text" class="searchInput" />
-      <span class="searchTxt">搜索</span>
-      <van-icon
-        class-prefix="my-icon"
-        name="search"
-        class="iconfont icon-sousuo"
-      />
-    </div>
+    <van-sticky>
+      <div class="topBar">
+        <div @click="toSearch">
+          <button type="text" class="searchInput" />
+          <span class="searchTxt">搜索</span>
+          <van-icon
+            class-prefix="my-icon"
+            name="search"
+            class="iconfont icon-sousuo"
+          />
+        </div>
+      </div>
+    </van-sticky>
 
     <!-- 下层频道栏 -->
     <div class="channelBar">
       <!-- 右侧More按钮 -->
-      <div class="iconMore">
-        <van-icon
-          class-prefix="my-icon"
-          name="extra"
-          class="iconfont icon-gengduo"
-          @click="showPopup"
-        />
-      </div>
+      <van-sticky offset-top="1.3333rem">
+        <div class="iconMore">
+          <van-icon
+            class-prefix="my-icon"
+            name="extra"
+            class="iconfont icon-gengduo"
+            @click="showPopup"
+          />
+        </div>
+      </van-sticky>
       <!-- 频道筛选区 -->
       <van-popup v-model="show" get-container="body">
-        <ChannelIconMore @outMaskCover="outMaskCover" @changeTags="changeTags"></ChannelIconMore>
+        <ChannelIconMore
+          @outMaskCover="outMaskCover"
+          @changeTags="changeTags"
+        ></ChannelIconMore>
       </van-popup>
       <!-- 顶部滑动栏 -->
-      <van-tabs v-model="activeName" swipeable animated>
+      <van-tabs
+        v-model="activeName"
+        swipeable
+        animated
+        sticky
+        offset-top="1.3333rem"
+      >
         <van-tab
           v-for="k in userChannel"
           :title="k.name"
           :key="k.id"
           :name="k.id"
+          class="ContentTab"
         >
           <!-- 组件 --- 内容模块列表 -->
           <Content :artId="k.id"></Content>
@@ -75,6 +91,9 @@ export default {
     },
     changeTags(id) {
       this.activeName = id
+    },
+    toSearch() {
+      this.$router.push('/search')
     }
   }
 }
@@ -148,12 +167,12 @@ export default {
   // ^ --- 频道栏顶部右侧More图标样式
   .iconMore {
     width: 80px;
-    height: 80px;
-    background-color: #fff;
+    height: 87px;
+    background-color: #ffffff;
     z-index: 998;
     position: absolute;
     right: 0;
-    top: 0;
+    top: 2px;
 
     .icon-gengduo {
       font-size: 45px;
@@ -163,5 +182,18 @@ export default {
       transform: translate(-50%, -50%);
     }
   }
+}
+
+// ^ --- 定制样式
+// * --- 频道栏点击激活特效
+/deep/ .van-tab--active {
+  font-weight: 600;
+}
+
+// ^ --- 内容展示模块滚动位置固定
+.ContentTab{
+  width: 100vw;
+  height: 78vh;
+  overflow: auto;
 }
 </style>

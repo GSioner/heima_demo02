@@ -5,7 +5,9 @@ import {
   getAritcle,
   feedBack,
   reportArticle,
-  getAllChannel
+  getAllChannel,
+  getSuggestionWord,
+  getSearchResult
 } from './api.js'
 
 export const userLoginAPI = userLogin
@@ -21,3 +23,7 @@ export const feedBackAPI = feedBack
 export const reportArticleAPI = reportArticle
 
 export const getAllChannelAPI = getAllChannel
+
+export const getSuggestionWordAPI = getSuggestionWord
+
+export const getSearchResultAPI = getSearchResult

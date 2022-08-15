@@ -14,7 +14,7 @@
         class="customBtn"
         color="#f85959"
         @click="openCross"
-        >编辑</van-button
+        >{{openBtn ? '取消' : '编辑'}}</van-button
       >
     </van-cell>
     <!-- 我的频道区块Tags -->

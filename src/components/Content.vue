@@ -4,13 +4,15 @@
       v-model="refreshing"
       @refresh="onRefresh"
       immediate-check="false"
-      success-text="刷新成功"
+      :success-text="refreshTxt"
     >
       <van-list
         offset="50"
         v-model="loading"
         :finished="finished"
         finished-text="没有更多了"
+        :error.sync="error"
+        error-text="请求失败，点击重新加载"
         @load="onLoad"
       >
         <!-- ↓组件 --- 内容栏展示区↓ -->
@@ -42,7 +44,9 @@ export default {
       finished: false,
       refreshing: false,
       articleList: [],
-      prevTime: new Date()
+      prevTime: new Date(),
+      error: false,
+      refreshTxt: ''
     }
   },
   methods: {
@@ -61,39 +65,46 @@ export default {
       return res.data.data
     },
     // ^ --- 懒加载刷新
-    async onLoad(time) {
-      if (!this.prevTime) {
-        this.finished = true
+    onLoad(time) {
+      try {
+        if (!this.prevTime) {
+          this.finished = true
+          this.loading = true
+        }
+        this.loading = true
+        const timeId = setTimeout(async () => {
+          const res = await this.sameFn(time)
+          this.articleList.push(...res.results)
+          this.loading = false
+          clearTimeout(timeId)
+        }, 500)
+      } catch (err) {
+        this.error = true
         this.loading = true
       }
-      this.loading = true
-      const timeId = setTimeout(async () => {
-        const res = await this.sameFn(time)
-        this.articleList = [...this.articleList, ...res.results]
-        this.loading = false
-        clearTimeout(timeId)
-      }, 500)
     },
     // ^ --- 下拉刷新
     async onRefresh() {
-      // 清空列表数据
-      this.finished = false
-      this.articleList = []
-
-      // 重新加载数据
-      // 将 loading 设置为 true，表示处于加载状态
-      this.loading = true
-      this.refreshing = false
-      this.onLoad(new Date())
+      try {
+        this.finished = false
+        this.articleList = []
+        this.loading = true
+        this.refreshing = false
+        this.onLoad(new Date())
+        this.refreshTxt = '数据刷新成功！'
+      } catch (err) {
+        this.refreshTxt = '刷新失败！'
+        this.loading = true
+      }
     }
   },
   // ^ --- 初始化数据
   async created() {
     const res = await this.sameFn(new Date())
     this.articleList = res.results
-    this.loading = true
+    this.loading = false
   }
 }
 </script>
 
-<style scoped></style>
+<style scoped lang="less"></style>

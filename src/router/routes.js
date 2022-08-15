@@ -18,6 +18,7 @@ export default [
   {
     path: '/home',
     name: 'home',
+    redirect: '/home/homeview',
     component: () => import('@/views/Home'),
     children: [
       // ^ --- 配置个人中心页面
@@ -39,5 +40,11 @@ export default [
     path: '/login',
     name: 'login',
     component: () => import('@/views/Login')
+  },
+  // ^ --- 配置搜索页面
+  {
+    path: '/search',
+    name: 'search',
+    component: () => import('@/views/Search')
   }
 ]

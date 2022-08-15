@@ -48,3 +48,17 @@ export const getAllChannel = (data) => {
     url: '/v1_0/channels'
   })
 }
+
+export const getSuggestionWord = (data) => {
+  return requestNews({
+    url: '/v1_0/suggestion',
+    data
+  })
+}
+
+export const getSearchResult = data => {
+  return requestNews({
+    url: '/v1_0/search',
+    data
+  })
+}

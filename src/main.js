@@ -14,9 +14,16 @@ Vue.use(Vant)
 
 Vue.config.productionTip = false
 Vue.prototype.$notify = notify
+Vue.prototype.log = window.console.log
+Vue.prototype.LOG = (item) => {
+  return console.log(item)
+}
+Vue.prototype.LOGE = (e) => {
+  return console.log(e)
+}
 
 new Vue({
   router,
   store,
-  render: h => h(App)
+  render: (h) => h(App)
 }).$mount('#app')
