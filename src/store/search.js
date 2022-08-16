@@ -1,4 +1,5 @@
 import { getSuggestionWordAPI, getSearchResultAPI } from '@/api'
+import { setToken } from '@/utils/Token.js'
 export default {
   namespaced: true,
   state: {
@@ -16,11 +17,13 @@ export default {
         state.historyList.splice(i, 1)
       }
       state.historyList.unshift(data)
+      setToken('history', state.historyList)
     },
     DELETE_HISTORY_INFO(state, data) {
       if (data === 'delete') return (state.historyList = [])
       const i = state.historyList.indexOf(data)
       state.historyList.splice(i, 1)
+      setToken('history', state.historyList)
     },
     GET_SEARCH_RESULT_MUTATION(state, data) {
       state.searchList = data

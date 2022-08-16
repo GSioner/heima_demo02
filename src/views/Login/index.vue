@@ -136,10 +136,8 @@ export default {
     backIcon() {
       if (this.$route.query.backpage) {
         this.$router.push(this.$route.query.backpage)
-      } else if (this.$router.fallback) {
-        this.$router.back()
       } else {
-        this.$router.push('/home/usercenter')
+        this.$router.back()
       }
     },
     // ^ --- 验证个人信息是否可用

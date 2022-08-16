@@ -18,6 +18,7 @@
         <!-- ↓组件 --- 内容栏展示区↓ -->
         <ContentCell
           :dataList="k"
+          :index="i"
           v-for="(k, i) in articleList"
           :key="i"
           class="cell"

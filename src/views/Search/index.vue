@@ -79,6 +79,7 @@
 
 <script>
 import ContentCell from '@/components/ContentCell.vue'
+import { getToken } from '@/utils/Token.js'
 export default {
   name: 'SearchModel',
   components: {
@@ -102,7 +103,11 @@ export default {
       }
     },
     historyList() {
-      return this.$store.state.search.historyList
+      try {
+        return getToken('history')
+      } catch (err) {
+        return this.$store.state.search.historyList
+      }
     },
     searchList() {
       return this.$store.state.search.searchList

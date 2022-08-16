@@ -26,7 +26,7 @@
         <template #label>
           <div class="content">
             <p class="left">
-              <span class="red tag">置顶</span>
+              <span class="red tag" v-show="index < 4">置顶</span>
               <span class="tag">{{ dataList.aut_name }}</span>
               <span class="tag">{{ dataList.comm_count }}评论数</span>
               <span class="tag">{{ time }}年之前</span>
@@ -50,7 +50,7 @@ export default {
   components: {
     UnlikeBtn
   },
-  props: ['dataList'],
+  props: ['dataList', 'index'],
   data() {
     return {
       time: '',
