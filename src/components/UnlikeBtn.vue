@@ -1,6 +1,6 @@
 <template>
   <div>
-    <van-icon name="cross" @click="dislike" />
+    <van-icon name="cross" @click.stop="dislike" />
     <van-action-sheet
       v-model="show"
       :actions="actions"

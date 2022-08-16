@@ -18,8 +18,7 @@
     <!-- 下层频道栏 -->
     <div class="channelBar">
       <!-- 右侧More按钮 -->
-      <van-sticky offset-top="1.3333rem">
-        <div class="iconMore">
+        <div class="iconMore" sticky>
           <van-icon
             class-prefix="my-icon"
             name="extra"
@@ -27,12 +26,12 @@
             @click="showPopup"
           />
         </div>
-      </van-sticky>
       <!-- 频道筛选区 -->
       <van-popup v-model="show" get-container="body">
         <ChannelIconMore
           @outMaskCover="outMaskCover"
           @changeTags="changeTags"
+          :activeName="activeName"
         ></ChannelIconMore>
       </van-popup>
       <!-- 顶部滑动栏 -->

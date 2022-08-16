@@ -13,9 +13,14 @@ router.beforeEach((to, from, next) => {
   // console.log(to)
   // console.log('------------')
   // console.log(from)
-// ^ --- 使用from的数据替换to即可常规调取到的路由数据，完善回退功能
-  to.query.backpage = from.path
-  if ((to.name === 'login' || from.name === 'login') && !!getToken('heima_Token')) {
+  // ^ --- 使用from的数据替换to即可常规调取到的路由数据，完善回退功能
+  if (!from.path === '/') {
+    to.query.backpage = from.path
+  }
+  if (
+    (to.name === 'login' || from.name === 'login') &&
+    !!getToken('heima_Token')
+  ) {
     history.pushState(null, null, document.URL)
     window.addEventListener('popstate', function () {
       history.pushState(null, null, document.URL)

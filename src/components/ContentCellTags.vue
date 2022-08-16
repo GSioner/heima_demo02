@@ -14,7 +14,7 @@
         class="customBtn"
         color="#f85959"
         @click="openCross"
-        >{{openBtn ? '取消' : '编辑'}}</van-button
+        >{{ openBtn ? '取消' : '编辑' }}</van-button
       >
     </van-cell>
     <!-- 我的频道区块Tags -->
@@ -25,9 +25,10 @@
         :text="k.name"
         class="relative"
         @click="changeTags(k.id)"
+        :class="{ active: k.id === activeName }"
       >
         <van-icon
-          name="cross"
+          name="close"
           slot="icon"
           class="deleteIcon"
           @click="modifiTag(k.id)"
@@ -51,12 +52,15 @@
 
 <script>
 export default {
+  name: 'MoreIconTags',
+  props: ['activeName'],
   data() {
     return {
       show: true,
       openBtn: false
     }
   },
+  // ^ --- 获取用户频道数据和所有频道数据
   computed: {
     userChannelTags() {
       return this.$store.state.channel.userChannel
@@ -66,23 +70,29 @@ export default {
     }
   },
   methods: {
+    // ^ --- 封装重复代码函数
     async SameFn() {
       await this.$store.dispatch('channel/GET_ALL_CHANNEL_ACTION')
     },
+    // ^ --- 退出频道筛选按钮
     outMaskCover() {
       this.$emit('outMaskCover', false)
     },
+    // ^ --- 编辑删除频道按钮
     openCross() {
       this.openBtn = !this.openBtn
     },
+    // ^ --- 删除频道按钮
     async modifiTag(id) {
       await this.$store.commit('channel/DELETE_CHANNEL', id)
       await this.SameFn()
     },
+    // ^ --- 点击切换至主页按钮
     changeTags(id) {
       this.$emit('outMaskCover', false)
       this.$emit('changeTags', id)
     },
+    // ^ --- 添加频道按钮
     async addChannel(id) {
       if (this.openBtn === false) return
       await this.$store.commit('channel/ADD_NEW_USER_CHANNEL', id)
@@ -123,9 +133,9 @@ export default {
 
   .deleteIcon {
     position: absolute;
-    top: -20px;
-    right: -70px;
-    font-size: 10px;
+    top: -40px;
+    right: -90px;
+    font-size: 30px;
   }
 }
 

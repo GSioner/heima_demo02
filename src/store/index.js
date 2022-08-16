@@ -4,6 +4,7 @@ import userInfo from './userInfo.js'
 import channel from './channel.js'
 import article from './article.js'
 import search from './search.js'
+import articleInfo from './articleInfo.js'
 
 Vue.use(Vuex)
 
@@ -16,6 +17,7 @@ export default new Vuex.Store({
     userInfo,
     channel,
     article,
-    search
+    search,
+    articleInfo
   }
 })

@@ -7,7 +7,12 @@ import {
   reportArticle,
   getAllChannel,
   getSuggestionWord,
-  getSearchResult
+  getSearchResult,
+  getArticleStructure,
+  getFollowing,
+  DelFollowing,
+  getLike,
+  DelLike
 } from './api.js'
 
 export const userLoginAPI = userLogin
@@ -27,3 +32,13 @@ export const getAllChannelAPI = getAllChannel
 export const getSuggestionWordAPI = getSuggestionWord
 
 export const getSearchResultAPI = getSearchResult
+
+export const getArticleStructureAPI = getArticleStructure
+
+export const getFollowingAPI = getFollowing
+
+export const DelFollowingAPI = DelFollowing
+
+export const getLikeAPI = getLike
+
+export const DelLikeAPI = DelLike

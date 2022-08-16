@@ -1,5 +1,5 @@
 <template>
-  <div class="main">
+  <div class="main" @click.stop="toArticle">
     <van-cell-group>
       <van-cell class="border">
         <template #title>
@@ -29,7 +29,7 @@
               <span class="red tag" v-show="index < 4">置顶</span>
               <span class="tag">{{ dataList.aut_name }}</span>
               <span class="tag">{{ dataList.comm_count }}评论数</span>
-              <span class="tag">{{ time }}年之前</span>
+              <span class="tag">{{ time }}</span>
             </p>
             <!-- 组件 --- 不感兴趣按钮 -->
             <UnlikeBtn :id="dataList.art_id" />
@@ -42,7 +42,6 @@
 </template>
 
 <script>
-import dayjs from '@/utils/dayjs.js'
 import UnlikeBtn from '@/components/UnlikeBtn.vue'
 
 export default {
@@ -57,9 +56,14 @@ export default {
       bool: this.dataList.cover.type <= 1
     }
   },
+  methods: {
+    toArticle() {
+      this.$router.push(`/article/${this.dataList.art_id}`)
+    }
+  },
   created() {
     const artTime = this.dataList.pubdate
-    this.time = dayjs(new Date()).from(dayjs(artTime), true).slice(0, 1)
+    this.time = this.$dayFrom(artTime)
   }
 }
 </script>

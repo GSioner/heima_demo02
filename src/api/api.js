@@ -56,9 +56,45 @@ export const getSuggestionWord = (data) => {
   })
 }
 
-export const getSearchResult = data => {
+export const getSearchResult = (data) => {
   return requestNews({
     url: '/v1_0/search',
     data
+  })
+}
+
+export const getArticleStructure = (data) => {
+  return requestNews({
+    url: `/v1_0/articles/${data}`
+  })
+}
+
+export const getFollowing = data => {
+  return requestNews({
+    url: '/v1_0/user/followings',
+    method: 'POST',
+    data
+  })
+}
+
+export const DelFollowing = data => {
+  return requestNews({
+    url: `/v1_0/user/followings/${data}`,
+    method: 'DELETE'
+  })
+}
+
+export const getLike = data => {
+  return requestNews({
+    url: '/v1_0/article/likings',
+    method: 'POST',
+    data
+  })
+}
+
+export const DelLike = data => {
+  return requestNews({
+    url: `/v1_0/article/likings/${data}`,
+    method: 'DELETE'
   })
 }

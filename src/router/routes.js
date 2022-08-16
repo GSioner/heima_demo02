@@ -46,5 +46,12 @@ export default [
     path: '/search',
     name: 'search',
     component: () => import('@/views/Search')
+  },
+  // ^ --- 配置文章详情页面
+  {
+    path: '/article/:articleId',
+    name: 'article',
+    props: true,
+    component: () => import('@/views/Article')
   }
 ]
