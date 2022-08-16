@@ -38,6 +38,10 @@
         >
       </div>
       <div class="content" v-html="articleList.content"></div>
+      <div class="footer">
+        <hr>
+        <span>正文结束</span>
+      </div>
     </div>
 
     <!-- 底部评论按钮 -->
@@ -59,7 +63,7 @@
       <van-tabbar-item
         icon="star-o"
         :class="{ red: collection }"
-        @click="collection = !collection"
+        @click="changeCollection"
       ></van-tabbar-item>
       <van-tabbar-item icon="share-o"></van-tabbar-item>
     </van-tabbar>
@@ -90,21 +94,26 @@ export default {
     },
     // ^ --- 切换关注
     changeFollowed() {
+      !this.articleList.is_followed ? this.$toast('已关注') : this.$toast('取关成功')
       if (!this.articleList.is_followed) {
         this.$store.dispatch('articleInfo/GET_FOLLOWING', { target: this.articleId })
       } else {
         this.$store.dispatch('articleInfo/DELETE_FOLLOWING', this.articleId)
       }
-      console.log(this.articleList.is_followed)
     },
     // ^ --- 切换点赞
     changeGoodJob() {
+      this.articleList.attitude < 1 ? this.$toast('点赞成功!') : this.$toast('取消点赞')
       if (this.articleList.attitude < 1) {
         this.$store.dispatch('articleInfo/GET_LIKE', { target: this.articleId })
       } else {
         this.$store.dispatch('articleInfo/DELETE_LIKE', this.articleId)
       }
-      console.log(this.articleList.attitude)
+    },
+    // ^ --- 切换收藏
+    changeCollection() {
+      this.collection = !this.collection
+      this.collection ? this.$toast('已收藏') : this.$toast('取消收藏')
     }
   },
   //   ^ --- 发送获取文章详情请求
@@ -117,7 +126,6 @@ export default {
     } catch (err) {
       this.$toast('数据获取失败')
     }
-    console.log(this.articleList)
   }
 }
 </script>
@@ -164,6 +172,7 @@ export default {
     width: 87vw;
     font-size: 30px;
     padding-bottom: 50px;
+    display: inline-block;
   }
 
   .title {
@@ -197,6 +206,25 @@ export default {
     .right {
       width: 170px;
       height: 60px;
+    }
+  }
+
+// ^ --- 底部-正文结束-内容
+  .footer{
+    margin-top: 50px;
+    font-size: 30px;
+    color: #a7a7a7;
+    position: relative;
+    margin-bottom: 200px;
+
+    span{
+      display: inline-block;
+      position: absolute;
+      padding: 10px;
+      top: -32px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: #fff;
     }
   }
 }
