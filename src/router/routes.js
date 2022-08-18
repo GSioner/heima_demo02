@@ -53,5 +53,11 @@ export default [
     name: 'article',
     props: true,
     component: () => import('@/views/Article')
+  },
+  // ^ --- 配置机器人聊天室
+  {
+    path: '/robot',
+    name: 'robot',
+    component: () => import('@/views/Robot')
   }
 ]

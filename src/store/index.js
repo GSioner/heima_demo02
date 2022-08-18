@@ -5,6 +5,7 @@ import channel from './channel.js'
 import article from './article.js'
 import search from './search.js'
 import articleInfo from './articleInfo.js'
+import comment from './comment.js'
 
 Vue.use(Vuex)
 
@@ -18,6 +19,7 @@ export default new Vuex.Store({
     channel,
     article,
     search,
-    articleInfo
+    articleInfo,
+    comment
   }
 })

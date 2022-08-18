@@ -1,15 +1,9 @@
 <template>
   <div class="main">
     <!-- 顶部盒子 -->
-    <div>
-      <van-cell-group>
-        <van-cell class="topBar">
-          <span slot="title" class="topTitle">文章详情</span>
-          <van-icon name="arrow-left" slot="icon" @click="backIcon" />
-          <van-icon name="ellipsis" slot="right-icon" />
-        </van-cell>
-      </van-cell-group>
-    </div>
+    <TopBar>
+      <span slot="title">文章标题</span>
+    </TopBar>
 
     <!-- 文章详情内容区 -->
     <div class="container">
@@ -23,6 +17,7 @@
           :src="articleList.aut_photo"
           round
           class="left"
+          @click="watchPic"
         />
         <div class="center">
           <p>{{ articleList.aut_name }}</p>
@@ -37,19 +32,46 @@
           >{{ articleList.is_followed ? '已关注' : '+关注' }}</van-button
         >
       </div>
-      <div class="content" v-html="articleList.content"></div>
+      <!-- 文章内容 -->
+      <!-- <div class="content" v-html="articleList.content"></div> -->
       <div class="footer">
-        <hr>
+        <hr />
         <span>正文结束</span>
+      </div>
+      <!-- 评论区 -->
+      <div v-if="commendList.total_count">
+        <CommentModel
+          :commendList="k"
+          v-for="(k, i) in commendList.results"
+          :key="i"
+        ></CommentModel>
       </div>
     </div>
 
     <!-- 底部评论按钮 -->
     <van-tabbar class="tabBar">
       <van-tabbar-item class="comment">
-        <van-button type="default" round>
+        <van-button type="default" round @click="popShow = true">
           <span slot="default" class="commentBtn">写评论</span>
         </van-button>
+        <van-popup
+          v-model="popShow"
+          position="bottom"
+          :style="{ height: '30%' }"
+          closeable
+          round
+          get-container="body"
+        >
+          <van-field
+            v-model="message"
+            rows="2"
+            autosize
+            type="textarea"
+            maxlength="200"
+            placeholder="请输入评论内容"
+            show-word-limit
+          />
+        </van-popup>
       </van-tabbar-item>
       <van-tabbar-item
         icon="good-job-o"
@@ -71,39 +93,49 @@
 </template>
 
 <script>
+import { ImagePreview } from 'vant'
+import { getCommentAPI } from '@/api'
+import TopBar from '@/components/TopBar.vue'
+import CommentModel from '@/components/ArticleComment.vue'
 export default {
   props: ['articleId'],
+  components: {
+    TopBar,
+    CommentModel
+  },
   data() {
     return {
-      collection: false
+      collection: false,
+      commendList: [],
+      popShow: false,
+      message: ''
     }
   },
   computed: {
     articleList() {
+      if (!this.$store.state.articleInfo.articleInfomation) return
       return this.$store.state.articleInfo.articleInfomation
     }
   },
   methods: {
-    // ^ --- 回退按钮(<形状按钮)
-    backIcon() {
-      if (this.$route.query.backpage) {
-        this.$router.push(this.$route.query.backpage)
-      } else {
-        this.$router.back()
-      }
-    },
     // ^ --- 切换关注
     changeFollowed() {
-      !this.articleList.is_followed ? this.$toast('已关注') : this.$toast('取关成功')
+      !this.articleList.is_followed
+        ? this.$toast('已关注')
+        : this.$toast('取关成功')
       if (!this.articleList.is_followed) {
-        this.$store.dispatch('articleInfo/GET_FOLLOWING', { target: this.articleId })
+        this.$store.dispatch('articleInfo/GET_FOLLOWING', {
+          target: this.articleId
+        })
       } else {
         this.$store.dispatch('articleInfo/DELETE_FOLLOWING', this.articleId)
       }
     },
     // ^ --- 切换点赞
     changeGoodJob() {
-      this.articleList.attitude < 1 ? this.$toast('点赞成功!') : this.$toast('取消点赞')
+      this.articleList.attitude < 1
+        ? this.$toast('点赞成功!')
+        : this.$toast('取消点赞')
       if (this.articleList.attitude < 1) {
         this.$store.dispatch('articleInfo/GET_LIKE', { target: this.articleId })
       } else {
@@ -114,6 +146,22 @@ export default {
     changeCollection() {
       this.collection = !this.collection
       this.collection ? this.$toast('已收藏') : this.$toast('取消收藏')
+    },
+    async getCommend() {
+      try {
+        const res = await getCommentAPI({
+          type: 'a',
+          source: this.articleId,
+          offset: '',
+          limit: ''
+        })
+        this.commendList = res.data.data
+      } catch (err) {
+        this.$toast('数据请求失败')
+      }
+    },
+    watchPic() {
+      ImagePreview([this.articleList.aut_photo])
     }
   },
   //   ^ --- 发送获取文章详情请求
@@ -126,6 +174,15 @@ export default {
     } catch (err) {
       this.$toast('数据获取失败')
     }
+    await this.getCommend()
+    console.log(this.commendList)
+  },
+  watch: {
+    articleList: {
+      handler() {},
+      deep: true,
+      immediate: true
+    }
   }
 }
 </script>
@@ -135,24 +192,6 @@ export default {
   width: 100%;
   height: 100%;
   box-sizing: border-box;
-}
-// ^ --- 顶部蓝色盒子
-.topBar {
-  height: 100px;
-  width: 100vw;
-  background-color: #3296fa;
-  font-size: 50px;
-  color: white;
-  justify-content: space-between;
-
-  .topTitle {
-    display: block;
-    width: 100%;
-    height: 100%;
-    text-align: center;
-    font-size: 36px;
-    line-height: 60px;
-  }
 }
 
 // ^ --- 内容区块
@@ -209,15 +248,15 @@ export default {
     }
   }
 
-// ^ --- 底部-正文结束-内容
-  .footer{
+  // ^ --- 底部-正文结束-内容
+  .footer {
     margin-top: 50px;
     font-size: 30px;
     color: #a7a7a7;
     position: relative;
     margin-bottom: 200px;
 
-    span{
+    span {
       display: inline-block;
       position: absolute;
       padding: 10px;
@@ -245,6 +284,11 @@ export default {
       float: left;
       padding-left: 20px;
       line-height: 25px;
+      position: relative;
+    }
+
+    /deep/ .van-cell{
+      margin-top: 150px;
     }
   }
 }

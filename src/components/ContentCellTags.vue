@@ -14,7 +14,7 @@
         class="customBtn"
         color="#f85959"
         @click="openCross"
-        >{{ openBtn ? '取消' : '编辑' }}</van-button
+        >{{ openBtn ? '完成' : '编辑' }}</van-button
       >
     </van-cell>
     <!-- 我的频道区块Tags -->
@@ -32,7 +32,7 @@
           slot="icon"
           class="deleteIcon"
           @click="modifiTag(k.id)"
-          v-show="openBtn"
+          v-show="openBtn && ![0].includes(k.id)"
         />
       </van-grid-item>
     </van-grid>
@@ -84,13 +84,18 @@ export default {
     },
     // ^ --- 删除频道按钮
     async modifiTag(id) {
+      if (this.activeName === id) {
+        return await this.$emit('changeTags', 0)
+      }
       await this.$store.commit('channel/DELETE_CHANNEL', id)
       await this.SameFn()
     },
     // ^ --- 点击切换至主页按钮
     changeTags(id) {
-      this.$emit('outMaskCover', false)
-      this.$emit('changeTags', id)
+      if (!this.openBtn) {
+        this.$emit('outMaskCover', false)
+        this.$emit('changeTags', id)
+      }
     },
     // ^ --- 添加频道按钮
     async addChannel(id) {

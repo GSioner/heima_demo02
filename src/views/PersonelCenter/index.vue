@@ -71,7 +71,7 @@
     <!-- 消息通知/小智同学 -->
     <div class="msgURL">
       <van-cell title="消息通知" is-link to="/" />
-      <van-cell title="小智同学" is-link to="/" />
+      <van-cell title="小智同学" is-link to="/robot" />
     </div>
 
     <!-- 登出按钮 -->

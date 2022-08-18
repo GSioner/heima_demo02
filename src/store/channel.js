@@ -10,14 +10,17 @@ export default {
       state.userChannel = data
     },
     GET_ALL_CHANNEL_MUTAION(state, data) {
-      state.allChannel = data.filter((item) => state.userChannel.findIndex(res => res.id === item.id) === -1)
+      state.allChannel = data.filter(
+        (item) =>
+          state.userChannel.findIndex((res) => res.id === item.id) === -1
+      )
     },
     DELETE_CHANNEL(state, data) {
-      const i = state.userChannel.findIndex(item => item.id === data)
+      const i = state.userChannel.findIndex((item) => item.id === data)
       state.userChannel.splice(i, 1)
     },
     ADD_NEW_USER_CHANNEL(state, data) {
-      const i = state.allChannel.findIndex(item => item.id === data)
+      const i = state.allChannel.findIndex((item) => item.id === data)
       state.userChannel.push(state.allChannel[i])
     }
   },

@@ -12,7 +12,12 @@ import {
   getFollowing,
   DelFollowing,
   getLike,
-  DelLike
+  DelLike,
+  Robot,
+  getComment,
+  getCommentLike,
+  getCommentDislike,
+  addComment
 } from './api.js'
 
 export const userLoginAPI = userLogin
@@ -42,3 +47,13 @@ export const DelFollowingAPI = DelFollowing
 export const getLikeAPI = getLike
 
 export const DelLikeAPI = DelLike
+
+export const RobotAPI = Robot
+
+export const getCommentAPI = getComment
+
+export const getCommentLikeAPI = getCommentLike
+
+export const getCommentDislikeAPI = getCommentDislike
+
+export const addCommentAPI = addComment

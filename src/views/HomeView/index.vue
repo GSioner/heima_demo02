@@ -18,14 +18,14 @@
     <!-- 下层频道栏 -->
     <div class="channelBar">
       <!-- 右侧More按钮 -->
-        <div class="iconMore" sticky>
-          <van-icon
-            class-prefix="my-icon"
-            name="extra"
-            class="iconfont icon-gengduo"
-            @click="showPopup"
-          />
-        </div>
+      <div class="iconMore" sticky>
+        <van-icon
+          class-prefix="my-icon"
+          name="extra"
+          class="iconfont icon-gengduo"
+          @click="showPopup"
+        />
+      </div>
       <!-- 频道筛选区 -->
       <van-popup v-model="show" get-container="body">
         <ChannelIconMore
@@ -190,7 +190,7 @@ export default {
 }
 
 // ^ --- 内容展示模块滚动位置固定
-.ContentTab{
+.ContentTab {
   width: 100vw;
   height: 78vh;
   overflow: auto;

@@ -98,3 +98,39 @@ export const DelLike = data => {
     method: 'DELETE'
   })
 }
+
+export const Robot = data => {
+  return requestNews({
+    url: '/v1_0/socket.io/',
+    data
+  })
+}
+
+export const getComment = data => {
+  return requestNews({
+    url: '/v1_0/comments',
+    data
+  })
+}
+
+export const getCommentLike = data => {
+  return requestNews({
+    url: '/v1_0/comment/likings',
+    data,
+    method: 'POST'
+  })
+}
+
+export const getCommentDislike = data => {
+  return requestNews({
+    url: `/v1_0/comment/likings/${data}`,
+    method: 'DELETE'
+  })
+}
+
+export const addComment = data => {
+  return requestNews({
+    url: '/v1_0/comments',
+    data
+  })
+}
