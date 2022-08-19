@@ -6,6 +6,7 @@ import article from './article.js'
 import search from './search.js'
 import articleInfo from './articleInfo.js'
 import comment from './comment.js'
+import editMessage from './editMessage.js'
 
 Vue.use(Vuex)
 
@@ -20,6 +21,7 @@ export default new Vuex.Store({
     article,
     search,
     articleInfo,
-    comment
+    comment,
+    editMessage
   }
 })

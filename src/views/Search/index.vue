@@ -14,15 +14,13 @@
           @input="onInput(value)"
           @focus="onFocus"
           background="#2793ff"
-          clearable
         />
       </form>
     </div>
 
     <!-- 联想搜索数据 -->
     <div class="suggestion" v-if="sugWordShow">
-      <van-cell-group v-for="(k, i) in sugWord" :key="i" @click="
-      (k)">
+      <van-cell-group v-for="(k, i) in sugWord" :key="i" @click="onSearch(k)">
         <van-cell icon="search">
           <span slot="title" class="blue">{{
             new RegExp(`^${value}`).test(k) ? value : ''
@@ -68,11 +66,18 @@
 
     <!-- 内容单元格 -->
     <div class="ContentTab" v-else>
-      <ContentCell
-        :dataList="k"
-        v-for="k in searchList.results"
-        :key="k.art_id"
-      ></ContentCell>
+      <van-list
+        v-model="loading"
+        :finished="finished"
+        finished-text="没有更多了"
+        @load="onLoad"
+      >
+        <ContentCell
+          :dataList="k"
+          v-for="k in searchList.results"
+          :key="k.art_id"
+        ></ContentCell>
+      </van-list>
     </div>
   </div>
 </template>
@@ -91,7 +96,9 @@ export default {
       sugWordShow: false,
       deleteShow: false,
       historyShow: true,
-      cellShow: false
+      loading: false,
+      finished: false,
+      page: 1
     }
   },
   computed: {
@@ -114,26 +121,42 @@ export default {
       return this.$store.state.search.searchList
     }
   },
+  watch: {
+    historyList: {
+      handler() {},
+      deep: true,
+      immediate: true
+    },
+    searchList: {
+      handler() {},
+      deep: true,
+      immediate: true
+    },
+    sugWord: {
+      handler() {},
+      deep: true,
+      immediate: true
+    }
+  },
   methods: {
     // ^ --- 搜索框输入数据事件
     async onInput(val) {
-      this.historyShow = false
-      this.deleteShow = false
-      if (!this.value) return (this.sugWordShow = false)
+      if (!this.value) return (this.historyShow = true)
       await this.$store.dispatch('search/GET_SUGGESTION_WORD_ACTION', {
         q: val
       })
+      this.historyShow = false
+      this.deleteShow = false
       if (!this.sugWord || !this.sugWord[0]) return (this.sugWordShow = false)
       this.sugWordShow = true
     },
     // ^ --- 搜索框执行搜索事件
     onSearch(val) {
-      this.cellShow = true
       this.$store.commit('search/GET_HISTORY_INFO', val)
-      this.value = ''
+      this.value = val
       this.sugWordShow = false
       this.historyShow = false
-      this.getSearchList(val)
+      this.onLoad(val)
     },
     // ^ --- 搜索框取消事件
     onCancel() {
@@ -143,20 +166,27 @@ export default {
     clearInputWord() {
       if (this.sugWordShow) this.sugWord = []
     },
-    // ^ --- 搜索关键字请求发送
-    async getSearchList(val) {
-      const data = {
-        q: val
-      }
-      return await this.$store.dispatch('search/GET_SEARCH_RESULT_ACTION', data)
-    },
     onFocus() {
       this.historyShow = true
-      this.cellShow = false
+    },
+    // ^ --- 搜索关键字请求发送
+    async onLoad(val) {
+      await this.$store.dispatch('search/GET_SEARCH_RESULT_ACTION', {
+        q: val,
+        page: this.page,
+        per_page: 20
+      })
+      if (this.searchList.results) {
+        this.pag++
+      } else {
+        return (this.finished = true)
+      }
+      this.loading = true
+      this.finished = false
     }
   },
   async created() {
-    await console.log(this.searchList)
+    // await console.log(this.searchList)
   }
 }
 </script>

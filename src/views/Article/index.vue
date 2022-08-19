@@ -40,11 +40,12 @@
       </div>
       <!-- 评论区 -->
       <div v-if="commendList.total_count">
-        <CommentModel
+        <ArticleComment
           :commendList="k"
           v-for="(k, i) in commendList.results"
           :key="i"
-        ></CommentModel>
+          :articleId="articleId"
+        ></ArticleComment>
       </div>
     </div>
 
@@ -54,25 +55,12 @@
         <van-button type="default" round @click="popShow = true">
           <span slot="default" class="commentBtn">写评论</span>
         </van-button>
-        <van-popup
-          v-model="popShow"
-          position="bottom"
-          :style="{ height: '30%' }"
-          closeable
-          round
-          get-container="body"
-        >
-          <van-field
-            v-model="message"
-            rows="2"
-            autosize
-            type="textarea"
-            maxlength="200"
-            placeholder="请输入评论内容"
-            show-word-limit
-          />
-        </van-popup>
       </van-tabbar-item>
+
+      <!-- 评论发送模块 -->
+      <CommentAdd :show="popShow" @changeShow="changeShow" :articleList="articleList"></CommentAdd>
+      <!-- /评论发送模块 -->
+
       <van-tabbar-item
         icon="good-job-o"
         :class="{ red: articleList.attitude !== -1 }"
@@ -93,22 +81,25 @@
 </template>
 
 <script>
+import CommentAdd from '@/components/CommentAdd.vue'
 import { ImagePreview } from 'vant'
 import { getCommentAPI } from '@/api'
 import TopBar from '@/components/TopBar.vue'
-import CommentModel from '@/components/ArticleComment.vue'
+import ArticleComment from '@/components/ArticleComment.vue'
 export default {
+  name: 'Comment',
   props: ['articleId'],
   components: {
     TopBar,
-    CommentModel
+    ArticleComment,
+    CommentAdd
   },
   data() {
     return {
       collection: false,
       commendList: [],
-      popShow: false,
-      message: ''
+      customComment: [],
+      popShow: false
     }
   },
   computed: {
@@ -162,6 +153,9 @@ export default {
     },
     watchPic() {
       ImagePreview([this.articleList.aut_photo])
+    },
+    changeShow(bool) {
+      this.popShow = bool
     }
   },
   //   ^ --- 发送获取文章详情请求
@@ -175,11 +169,12 @@ export default {
       this.$toast('数据获取失败')
     }
     await this.getCommend()
-    console.log(this.commendList)
   },
   watch: {
     articleList: {
-      handler() {},
+      handler(val) {
+        return val
+      },
       deep: true,
       immediate: true
     }
@@ -287,7 +282,7 @@ export default {
       position: relative;
     }
 
-    /deep/ .van-cell{
+    /deep/ .van-cell {
       margin-top: 150px;
     }
   }

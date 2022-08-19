@@ -131,6 +131,13 @@ export const getCommentDislike = data => {
 export const addComment = data => {
   return requestNews({
     url: '/v1_0/comments',
-    data
+    data,
+    method: 'POST'
+  })
+}
+
+export const getUserMessage = () => {
+  return requestNews({
+    url: '/v1_0/user/profile'
   })
 }

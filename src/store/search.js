@@ -1,10 +1,10 @@
 import { getSuggestionWordAPI, getSearchResultAPI } from '@/api'
-import { setToken } from '@/utils/Token.js'
+import { getToken, removeToken, setToken } from '@/utils/Token.js'
 export default {
   namespaced: true,
   state: {
     suggestionWord: [],
-    historyList: [],
+    historyList: getToken('history') || [],
     searchList: []
   },
   mutations: {
@@ -20,7 +20,10 @@ export default {
       setToken('history', state.historyList)
     },
     DELETE_HISTORY_INFO(state, data) {
-      if (data === 'delete') return (state.historyList = [])
+      if (data === 'delete') {
+        state.historyList = []
+        return removeToken('history')
+      }
       const i = state.historyList.indexOf(data)
       state.historyList.splice(i, 1)
       setToken('history', state.historyList)

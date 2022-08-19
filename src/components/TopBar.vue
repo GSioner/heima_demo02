@@ -38,6 +38,8 @@ export default {
   font-size: 50px;
   color: white;
   justify-content: space-between;
+  display: flex;
+  align-items: center;
 
   .topTitle {
     display: block;
@@ -46,6 +48,8 @@ export default {
     text-align: center;
     font-size: 36px;
     line-height: 60px;
+    color: white;
+    flex: 1;
   }
 }
 </style>

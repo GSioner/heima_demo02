@@ -21,7 +21,7 @@
         </div>
         <!-- 右侧编辑资料按钮 -->
         <div class="right">
-          <van-button type="default" class="userBtn" round>编辑资料</van-button>
+          <van-button type="default" class="userBtn" round to="/editInfo">编辑资料</van-button>
         </div>
       </div>
 

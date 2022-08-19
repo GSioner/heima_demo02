@@ -59,5 +59,11 @@ export default [
     path: '/robot',
     name: 'robot',
     component: () => import('@/views/Robot')
+  },
+  // ^ --- 编辑个人资料
+  {
+    path: '/editInfo',
+    name: 'editInfo',
+    component: () => import('@/views/EditInfomation')
   }
 ]

@@ -1,4 +1,8 @@
-import { getCommentLikeAPI, getCommentDislikeAPI, addCommentAPI } from '@/api'
+import {
+  getCommentLikeAPI,
+  getCommentDislikeAPI,
+  addCommentAPI
+} from '@/api'
 export default {
   namespaced: true,
   state: {},
@@ -14,7 +18,7 @@ export default {
     },
     async ADD_COMMENT(action, data) {
       const res = await addCommentAPI(data)
-      console.log('res: ', res)
+      console.log('res: ', res.data.data)
     }
   },
   getters: {},
