@@ -69,7 +69,7 @@ export const getArticleStructure = (data) => {
   })
 }
 
-export const getFollowing = data => {
+export const getFollowing = (data) => {
   return requestNews({
     url: '/v1_0/user/followings',
     method: 'POST',
@@ -77,14 +77,14 @@ export const getFollowing = data => {
   })
 }
 
-export const DelFollowing = data => {
+export const DelFollowing = (data) => {
   return requestNews({
     url: `/v1_0/user/followings/${data}`,
     method: 'DELETE'
   })
 }
 
-export const getLike = data => {
+export const getLike = (data) => {
   return requestNews({
     url: '/v1_0/article/likings',
     method: 'POST',
@@ -92,28 +92,28 @@ export const getLike = data => {
   })
 }
 
-export const DelLike = data => {
+export const DelLike = (data) => {
   return requestNews({
     url: `/v1_0/article/likings/${data}`,
     method: 'DELETE'
   })
 }
 
-export const Robot = data => {
+export const Robot = (data) => {
   return requestNews({
     url: '/v1_0/socket.io/',
     data
   })
 }
 
-export const getComment = data => {
+export const getComment = (data) => {
   return requestNews({
     url: '/v1_0/comments',
     data
   })
 }
 
-export const getCommentLike = data => {
+export const getCommentLike = (data) => {
   return requestNews({
     url: '/v1_0/comment/likings',
     data,
@@ -121,14 +121,14 @@ export const getCommentLike = data => {
   })
 }
 
-export const getCommentDislike = data => {
+export const getCommentDislike = (data) => {
   return requestNews({
     url: `/v1_0/comment/likings/${data}`,
     method: 'DELETE'
   })
 }
 
-export const addComment = data => {
+export const addComment = (data) => {
   return requestNews({
     url: '/v1_0/comments',
     data,
@@ -139,5 +139,21 @@ export const addComment = data => {
 export const getUserMessage = () => {
   return requestNews({
     url: '/v1_0/user/profile'
+  })
+}
+
+export const updateUserImg = (data) => {
+  return requestNews({
+    url: '/v1_0/user/photo',
+    method: 'PATCH',
+    data
+  })
+}
+
+export const updateUserInfo = (data) => {
+  return requestNews({
+    url: '/v1_0/user/profile',
+    method: 'PATCH',
+    data
   })
 }

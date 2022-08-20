@@ -18,7 +18,9 @@ import {
   getCommentLike,
   getCommentDislike,
   addComment,
-  getUserMessage
+  getUserMessage,
+  updateUserImg,
+  updateUserInfo
 } from './api.js'
 
 export const userLoginAPI = userLogin
@@ -60,3 +62,7 @@ export const getCommentDislikeAPI = getCommentDislike
 export const addCommentAPI = addComment
 
 export const getUserMessageAPI = getUserMessage
+
+export const updateUserImgAPI = updateUserImg
+
+export const updateUserInfoAPI = updateUserInfo

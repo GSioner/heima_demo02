@@ -2,41 +2,44 @@
   <div class="main">
     <van-form>
       <!-- ↓顶部通道↓ -->
-      <TopBar>
-        <template #title>
-          <span slot="title" class="txt">个人信息</span>
-        </template>
-        <template #right-icon>
-          <span slot="right" class="txt" @click="onSubmit">保存</span>
-        </template>
-      </TopBar>
+      <van-nav-bar
+        title="个人信息"
+        right-text="保存"
+        left-arrow
+        @click-left="backIcon"
+        @click-right="onSubmit"
+        class="topbar"
+      />
       <!-- ↑顶部通道↑ -->
 
       <!-- ↓编辑资料区域↓ -->
       <div class="editModel">
         <van-cell-group class="top">
-          <van-cell title="头像" is-link class="cellContent">
-            <van-image
-              slot="default"
-              round
-              width=".8rem"
-              height=".8rem"
-              :src="userImg"
-            />
-          </van-cell>
-          <van-cell title="昵称" is-link class="cellContent">
-            <span slot="default" class="nickname">{{ name }}</span>
-            <van-popup v-model="ncikNameShow" position="top" :style="{ width: '100%' }" get-container="body" />
-          </van-cell>
-          <van-cell title="介绍" is-link class="cellContent" />
+          <!-- 头像 -->
+          <edit-user-img :userInfo="userInfo" @changeImg="photo = $event" />
+          <!-- 昵称 -->
+          <user-nickname
+            :userInfo="userInfo"
+            @changeNickname="userInfo.name = $event"
+          />
+          <!-- 介绍 -->
+          <user-introduce
+            :userInfo="userInfo"
+            @changeIntroduce="userInfo.intro = $event"
+          />
         </van-cell-group>
+
         <van-cell-group class="bottom">
-          <van-cell title="性别" is-link class="cellContent">
-            <span slot="default">{{ gender }}</span>
-          </van-cell>
-          <van-cell title="生日" is-link class="cellContent">
-            <span class="blue" slot="default">待完善</span>
-          </van-cell>
+          <!-- 性别 -->
+          <user-gender
+            :userInfo="userInfo"
+            @changeGender="userInfo.gender = $event"
+          />
+          <!-- 生日 -->
+          <user-birthday
+            :userInfo="userInfo"
+            @changeBirthday="userInfo.birthday = $event"
+          />
         </van-cell-group>
       </div>
       <!-- ↑编辑资料区域↑ -->
@@ -45,31 +48,53 @@
 </template>
 
 <script>
-import TopBar from '@/components/TopBar.vue'
-import { getToken } from '@/utils/Token'
+import UserBirthday from '@/components/UserInfo/UserBirthday.vue'
+import UserGender from '@/components/UserInfo/UserGender.vue'
+import EditUserImg from '@/components/UserInfo/EditUserImg.vue'
+import UserIntroduce from '@/components/UserInfo/UserIntroduce.vue'
+import UserNickname from '@/components/UserInfo/UserNickname.vue'
+import { getToken, setToken } from '@/utils/Token'
 export default {
   name: 'EditInfomation',
   components: {
-    TopBar
+    UserBirthday,
+    UserGender,
+    EditUserImg,
+    UserIntroduce,
+    UserNickname
   },
   data() {
     return {
       userInfo: getToken('userInfo'),
-      gender: this.userInfo === 0 ? '男' : '女',
-      name: this.userInfo.name,
-      userImg: this.userInfo.photo,
-      userMsg: this.userInfo.intro ? this.userInfo.intro : '待输入',
-      userBirthday: this.userInfo.birthday,
-      ncikNameShow: false
+      photo: ''
     }
   },
   methods: {
-    onSubmit() {
-      console.log('数据提交')
+    async onSubmit() {
+      this.userInfo.photo = this.photo
+      const data = {
+        name: this.userInfo.name,
+        gender: this.userInfo.gender,
+        birthday: this.userInfo.birthday,
+        intro: this.userInfo.intro
+      }
+      await this.$store.dispatch('editMessage/UPDATE_USER_IMG', this.photo)
+      await this.$store.dispatch('editMessage/UPDATE_USER_INFO', { ...data })
+      await this.$store.dispatch('editMessage/GET_USER_INFOMATION_ACTION')
+      setToken('userInfo', this.userInfo)
+      this.$toast.success('修改成功')
+    },
+    backIcon() {
+      if (this.$route.query.backpage) {
+        this.$router.push(this.$route.query.backpage)
+      } else {
+        this.$router.back()
+      }
     }
   },
   async created() {
     await this.$store.dispatch('editMessage/GET_USER_INFOMATION_ACTION')
+    console.log('userInfo', this.userInfo)
   }
 }
 </script>
@@ -80,13 +105,25 @@ export default {
   width: 100vw;
   height: 100vh;
 }
-// ^ --- 顶部默认组件
-.txt {
-  display: block;
-  text-align: right;
-  font-size: 36px;
-  line-height: 60px;
-  color: white;
+
+// ^ --- 顶部蓝色盒子
+.topbar {
+  background-color: #3296fa;
+
+  /deep/ .van-nav-bar__title {
+    color: white;
+  }
+
+  /deep/ .van-nav-bar__text {
+    color: white;
+    font-size: 32px;
+  }
+
+  /deep/ .van-icon,
+  .van-icon-arrow-left,
+  .van-nav-bar__arrow {
+    color: white;
+  }
 }
 
 // ^ --- 编辑区域
@@ -94,16 +131,5 @@ export default {
   .bottom {
     margin-top: 15px;
   }
-
-  .cellContent {
-    height: 100px;
-    font-size: 30px;
-    margin-top: -1px;
-  }
-}
-
-// ^ --- 定制样式区
-.blue {
-  color: #3296fa;
 }
 </style>

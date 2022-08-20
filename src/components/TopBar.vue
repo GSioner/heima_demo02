@@ -4,7 +4,7 @@
       <span slot="title" class="topTitle">
         <slot name="title"></slot>
       </span>
-      <slot name="icon">
+      <slot name="left">
         <van-icon name="arrow-left" slot="icon" @click="backIcon" />
       </slot>
       <slot name="right-icon">
