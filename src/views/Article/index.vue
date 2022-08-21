@@ -5,8 +5,32 @@
       <span slot="title">文章标题</span>
     </TopBar>
 
+    <!-- 页面获取情况显示 -->
+    <!-- 页面刷新中 -->
+    <div v-if="loading" class="loading">
+      <van-loading type="spinner" color="#1989fa" />
+    </div>
+
+    <!-- 页面错误404 -->
+    <van-empty
+      image="error"
+      description="页面找不到或已被删除!"
+      v-else-if="status === 404"
+    />
+
+    <!-- 网络错误请重试 -->
+    <van-empty
+      description="网络错误请重试"
+      image="network"
+      v-else-if="status !== 0 && status !== 404"
+    >
+      <van-button round type="danger" class="bottom-button" @click="getMsg"
+        >点击重试</van-button
+      >
+    </van-empty>
+
     <!-- 文章详情内容区 -->
-    <div class="container">
+    <div class="container" v-else-if="articleList.title">
       <h1 class="title">{{ articleList.title }}</h1>
       <!-- 顶部用户头像名称 -->
       <div class="userInfo">
@@ -23,17 +47,14 @@
           <p>{{ articleList.aut_name }}</p>
           <span>{{ $dayFrom(articleList.pubdate) }}</span>
         </div>
-        <van-button
-          round
-          type="info"
-          class="right"
-          :disabled="articleList.is_followed"
-          @click="changeFollowed"
-          >{{ articleList.is_followed ? '已关注' : '+关注' }}</van-button
-        >
+        <FollowBtn v-model="articleList.is_followed" :articleId="articleId" />
       </div>
       <!-- 文章内容 -->
-      <!-- <div class="content" v-html="articleList.content"></div> -->
+      <div
+        class="content markdown-body"
+        ref="articleContent"
+        v-html="articleList.content"
+      ></div>
       <div class="footer">
         <hr />
         <span>正文结束</span>
@@ -51,7 +72,7 @@
     </div>
 
     <!-- 底部评论按钮 -->
-    <van-tabbar class="tabBar">
+    <van-tabbar class="tabBar" v-if="goodJobRefresh">
       <van-tabbar-item class="comment">
         <van-button type="default" round @click="popShow = true">
           <span slot="default" class="commentBtn">写评论</span>
@@ -59,7 +80,11 @@
       </van-tabbar-item>
 
       <!-- 评论发送模块 -->
-      <CommentAdd :show="popShow" @changeShow="changeShow" :articleList="articleList"></CommentAdd>
+      <CommentAdd
+        :show="popShow"
+        @changeShow="changeShow"
+        :articleList="articleList"
+      ></CommentAdd>
       <!-- /评论发送模块 -->
 
       <van-tabbar-item
@@ -82,6 +107,7 @@
 </template>
 
 <script>
+import FollowBtn from '@/components/FollowBtn.vue'
 import CommentAdd from '@/components/CommentAdd.vue'
 import { ImagePreview } from 'vant'
 import { getCommentAPI } from '@/api'
@@ -93,14 +119,18 @@ export default {
   components: {
     TopBar,
     ArticleComment,
-    CommentAdd
+    CommentAdd,
+    FollowBtn
   },
   data() {
     return {
       collection: false,
       commendList: [],
       customComment: [],
-      popShow: false
+      popShow: false,
+      loading: true,
+      status: 0,
+      goodJobRefresh: true
     }
   },
   computed: {
@@ -110,35 +140,37 @@ export default {
     }
   },
   methods: {
-    // ^ --- 切换关注
-    changeFollowed() {
-      !this.articleList.is_followed
-        ? this.$toast('已关注')
-        : this.$toast('取关成功')
-      if (!this.articleList.is_followed) {
-        this.$store.dispatch('articleInfo/GET_FOLLOWING', {
-          target: this.articleId
-        })
-      } else {
-        this.$store.dispatch('articleInfo/DELETE_FOLLOWING', this.articleId)
-      }
-    },
     // ^ --- 切换点赞
-    changeGoodJob() {
-      this.articleList.attitude < 1
+    async changeGoodJob() {
+      this.articleList.attitude !== 1
         ? this.$toast('点赞成功!')
         : this.$toast('取消点赞')
-      if (this.articleList.attitude < 1) {
-        this.$store.dispatch('articleInfo/GET_LIKE', { target: this.articleId })
-      } else {
-        this.$store.dispatch('articleInfo/DELETE_LIKE', this.articleId)
+      try {
+        if (this.articleList.attitude !== 1) {
+          this.$store.dispatch('articleInfo/GET_LIKE', {
+            target: this.articleId
+          })
+        } else {
+          this.$store.dispatch('articleInfo/DELETE_LIKE', this.articleId)
+        }
+      } catch (err) {
+        if (err.response.status === 401) {
+          this.$router.push('/login')
+        }
       }
+      this.getMsg()
+      this.goodJobRefresh = false
+      this.getMsg()
+      setTimeout(() => {
+        this.goodJobRefresh = true
+      }, 0)
     },
     // ^ --- 切换收藏
     changeCollection() {
       this.collection = !this.collection
       this.collection ? this.$toast('已收藏') : this.$toast('取消收藏')
     },
+    // ^ --- 获取评论数据
     async getCommend() {
       try {
         const res = await getCommentAPI({
@@ -149,6 +181,7 @@ export default {
         })
         this.commendList = res.data.data
       } catch (err) {
+        console.log(err)
         this.$toast('数据请求失败')
       }
     },
@@ -157,25 +190,53 @@ export default {
     },
     changeShow(bool) {
       this.popShow = bool
+    },
+    // ^ --- 验证文章数据
+    async getMsg() {
+      try {
+        await this.$store.dispatch(
+          'articleInfo/GET_ARTICLE_INFO_ACTION',
+          this.articleId
+        )
+        await this.getCommend()
+      } catch (err) {
+        if (err.response.status === 404) {
+          this.status = 404
+        } else {
+          this.status = err.response.status
+        }
+        this.$toast('数据获取失败')
+      } finally {
+        this.loading = false
+      }
+    },
+    viewImg() {
+      const content = this.$refs.articleContent
+      const imgs = content.querySelectorAll('img')
+      const images = []
+      imgs.forEach((item, i) => {
+        images.push(item.src)
+        item.onclick = () => {
+          ImagePreview({
+            images: images,
+            startPosition: i
+          })
+        }
+      })
     }
   },
+
+  mounted() {},
   //   ^ --- 发送获取文章详情请求
   async created() {
-    try {
-      await this.$store.dispatch(
-        'articleInfo/GET_ARTICLE_INFO_ACTION',
-        this.articleId
-      )
-    } catch (err) {
-      this.$toast('数据获取失败')
-    }
-    await this.getCommend()
+    await this.getMsg()
+    setTimeout(() => {
+      this.viewImg()
+    }, 0)
   },
   watch: {
     articleList: {
-      handler(val) {
-        return val
-      },
+      handler() {},
       deep: true,
       immediate: true
     }
@@ -236,11 +297,6 @@ export default {
         font-size: 20px;
         color: #b7b7b7;
       }
-    }
-
-    .right {
-      width: 170px;
-      height: 60px;
     }
   }
 
@@ -314,5 +370,21 @@ pre {
   display: inline-block;
   width: 100%;
   overflow: auto;
+}
+
+/deep/ .bottom-button {
+  width: 200px;
+  height: 40px;
+}
+
+.loading {
+  position: fixed;
+  width: 100px;
+  height: 100px;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
 }
 </style>

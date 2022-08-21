@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="refresh">
     <van-cell title="头像" is-link class="cellContent" @click="show = true">
       <van-image
         slot="default"
@@ -72,7 +72,8 @@ export default {
       popShow: false,
       viewImg: '',
       imgVal: '',
-      cropper: null
+      cropper: null,
+      refresh: true
     }
   },
   methods: {
@@ -88,6 +89,10 @@ export default {
       const file = e.target.files[0]
       const data = window.URL.createObjectURL(file)
       this.viewImg = data
+      this.refresh = false
+      this.$nextTick(() => {
+        this.refresh = true
+      })
     },
     async onConfirm() {
       this.userImg = this.viewImg
@@ -100,7 +105,6 @@ export default {
     },
     loadCropper() {
       const image = this.$refs.myImg
-      console.log('image: ', image)
       this.cropper = new Cropper(image, {
         img: this.viewImg,
         aspectRatio: 1,

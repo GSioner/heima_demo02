@@ -12,6 +12,7 @@
             width="1.8rem"
             height="1.8rem"
             :src="userInfo.photo"
+            @click="viewImg"
             ><template v-slot:loading>
               <van-loading type="spinner" size="20" />
             </template>
@@ -21,7 +22,9 @@
         </div>
         <!-- 右侧编辑资料按钮 -->
         <div class="right">
-          <van-button type="default" class="userBtn" round to="/editInfo">编辑资料</van-button>
+          <van-button type="default" class="userBtn" round to="/editInfo"
+            >编辑资料</van-button
+          >
         </div>
       </div>
 
@@ -82,6 +85,7 @@
 </template>
 
 <script>
+import { ImagePreview } from 'vant'
 import { removeToken, getToken } from '@/utils/Token.js'
 export default {
   name: 'UserCenterModel',
@@ -118,6 +122,9 @@ export default {
     },
     checkToken() {
       this.show = !!getToken('heima_Token')
+    },
+    viewImg() {
+      ImagePreview([this.userInfo.photo])
     }
   },
   async created() {

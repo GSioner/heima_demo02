@@ -60,8 +60,7 @@ export default {
       },
       immediate: true
     }
-  },
-  created() {}
+  }
 }
 </script>
 

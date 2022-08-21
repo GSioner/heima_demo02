@@ -78,7 +78,8 @@ export default {
         birthday: this.userInfo.birthday,
         intro: this.userInfo.intro
       }
-      await this.$store.dispatch('editMessage/UPDATE_USER_IMG', this.photo)
+      const res = await this.$store.dispatch('editMessage/UPDATE_USER_IMG', this.photo)
+      data.photo = res.data.data.photo
       await this.$store.dispatch('editMessage/UPDATE_USER_INFO', { ...data })
       await this.$store.dispatch('editMessage/GET_USER_INFOMATION_ACTION')
       setToken('userInfo', this.userInfo)
@@ -94,7 +95,6 @@ export default {
   },
   async created() {
     await this.$store.dispatch('editMessage/GET_USER_INFOMATION_ACTION')
-    console.log('userInfo', this.userInfo)
   }
 }
 </script>

@@ -10,6 +10,7 @@ import '@/assets/font_3578437_hfi1c416j2f/iconfont.css'
 import '@/style/reset.css'
 import notify from '@/utils/notify.js'
 import dayjs from '@/utils/dayjs.js'
+import 'github-markdown-css'
 
 Vue.use(Vant)
 

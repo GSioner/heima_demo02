@@ -14,7 +14,8 @@ export default {
       action.commit('GET_USER_INFOMATION_MUTATION', res.data.data)
     },
     async UPDATE_USER_IMG(action, data) {
-      await updateUserImgAPI(data)
+      const res = await updateUserImgAPI(data)
+      return res
     },
     async UPDATE_USER_INFO(action, data) {
       await updateUserInfoAPI(data)

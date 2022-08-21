@@ -1,10 +1,20 @@
 import theAxios from 'axios'
 import { getToken, setToken } from '@/utils/Token.js'
 import router from '@/router'
+// import JSONbig from 'json-bigint'
 
 const newsAxios = theAxios.create({
   baseURL: 'http://geek.itheima.net',
   timeout: 60000
+  // transformResponse: [
+  //   function (data) {
+  //     try {
+  //       return JSONbig.parse(data)
+  //     } catch (err) {
+  //       return JSON.parse(data)
+  //     }
+  //   }
+  // ]
 })
 
 // 添加请求拦截器
