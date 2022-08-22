@@ -34,6 +34,10 @@ export default {
       popShow: false
     }
   },
+  created() {
+    console.log(this.comID)
+    console.log(this.articleId)
+  },
   methods: {
     addComment() {
       this.$store.dispatch('comment/ADD_COMMENT', {

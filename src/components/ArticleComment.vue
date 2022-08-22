@@ -24,14 +24,15 @@
             @click="getCommentLike"
             :class="{ red: isLiking }"
           />
-          <span>{{ likeCount }}</span>
+          <span>{{ likeCount || '赞' }}</span>
         </div>
       </van-cell>
       <!-- ↑顶部评论者名称 + 点赞模块↑👆 -->
 
       <!-- 👇↓发布时间 + 回复模块↓ -->
-      <van-cell :title="commendList.content" :border="false">
-        <div slot="label" class="timeAndComment">
+      <van-cell :border="false">
+        <span>{{ commendList.content }}</span>
+        <div class="timeAndComment">
           <span class="time">{{ time + ' ·' }}</span>
           <van-button type="default" class="btn" @click="toComment">{{
             commendList.reply_count + '回复'
@@ -140,7 +141,6 @@ export default {
 <style scoped lang="less">
 .main {
   display: flex;
-
   // ^ --- 左侧评论者头像
   .left {
     padding-top: 30px;
@@ -172,13 +172,17 @@ export default {
     }
 
     // ^ --- 评论发布时间 + 回复
-    .timeAndComment {
+    /deep/ .timeAndComment {
+      height: 100%;
+      width: 100%;
       display: flex;
+      margin-top: 30px;
 
       .time {
         color: black;
         line-height: 50px;
         width: 170px;
+        margin-right: 15px;
       }
 
       .btn {

@@ -1,5 +1,5 @@
 <template>
-  <div class="main">
+  <div class="comment">
     <!-- 👇↓左侧评论者头像↓ -->
     <div class="left">
       <van-image
@@ -30,8 +30,9 @@
       <!-- ↑顶部评论者名称 + 点赞模块↑ -->
 
       <!-- ↓发布时间 + 回复模块↓ -->
-      <van-cell :title="commendList.content" :border="false">
-        <div slot="label" class="timeAndComment">
+      <van-cell :border="false">
+        <span>{{ commendList.content }}</span>
+        <div class="timeAndComment">
           <span class="time">{{ time + ' ·' }}</span>
           <van-button type="default" class="btn" @click="toComment">{{
             commendList.reply_count + '回复'
@@ -128,7 +129,7 @@ export default {
 </script>
 
 <style scoped lang="less">
-.main {
+.comment {
   display: flex;
   width: 100%;
   height: 100%;
@@ -165,7 +166,10 @@ export default {
 
     // ^ --- 评论发布时间 + 回复
     .timeAndComment {
+      height: 100%;
+      width: 100%;
       display: flex;
+      margin-top: 20px;
 
       .time {
         color: black;

@@ -39,10 +39,7 @@ newsAxios.interceptors.response.use(
     return response
   },
   async function (error) {
-    if (error.response && error.response.status === 401) {
-      if (!getToken('heima_Token')) {
-        return Promise.reject(error)
-      }
+    if (error.response.status === 401) {
       try {
         const res = await theAxios({
           url: 'http://geek.itheima.net/v1_0/authorizations',
@@ -59,6 +56,7 @@ newsAxios.interceptors.response.use(
     } else {
       return Promise.reject(error)
     }
+    return Promise.reject(error)
   }
 )
 

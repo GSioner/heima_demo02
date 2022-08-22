@@ -69,6 +69,8 @@ export default {
 .main {
   position: relative;
   padding-top: 50px;
+  display: flex;
+  flex-direction: column;
 }
 .addComment {
   position: absolute;

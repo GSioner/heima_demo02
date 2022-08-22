@@ -69,6 +69,8 @@
           :articleId="articleId"
         ></ArticleComment>
       </div>
+      <!-- 评论展示完毕 -->
+      <van-empty description="全部评论已展示完毕" v-else />
     </div>
 
     <!-- 底部评论按钮 -->
@@ -81,9 +83,11 @@
 
       <!-- 评论发送模块 -->
       <CommentAdd
+        v-if="articleList"
         :show="popShow"
         @changeShow="changeShow"
-        :articleList="articleList"
+        :articleId="''"
+        :comID="articleId"
       ></CommentAdd>
       <!-- /评论发送模块 -->
 
@@ -150,20 +154,16 @@ export default {
           this.$store.dispatch('articleInfo/GET_LIKE', {
             target: this.articleId
           })
+          this.articleList.attitude = 1
         } else {
           this.$store.dispatch('articleInfo/DELETE_LIKE', this.articleId)
+          this.articleList.attitude = -1
         }
       } catch (err) {
         if (err.response.status === 401) {
-          this.$router.push('/login')
+          this.$toast('请先登录!')
         }
       }
-      this.getMsg()
-      this.goodJobRefresh = false
-      this.getMsg()
-      setTimeout(() => {
-        this.goodJobRefresh = true
-      }, 0)
     },
     // ^ --- 切换收藏
     changeCollection() {
@@ -225,14 +225,13 @@ export default {
       })
     }
   },
-
-  mounted() {},
   //   ^ --- 发送获取文章详情请求
   async created() {
     await this.getMsg()
     setTimeout(() => {
       this.viewImg()
     }, 0)
+    console.log(this.articleList)
   },
   watch: {
     articleList: {
