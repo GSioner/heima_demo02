@@ -1,5 +1,12 @@
 <template>
   <div class="main">
+    <!-- 顶层状态栏 -->
+    <van-nav-bar
+      title="全部回复"
+      class="top"
+    />
+    <!-- 顶层状态栏 -->
+
     <!-- ↓展示评论↓ -->
     <div class="box">
       <ReplyCommentArticle
@@ -67,10 +74,13 @@ export default {
 
 <style scoped lang="less">
 .main {
+  height: 80vh;
+  width: 100%;
   position: relative;
   padding-top: 50px;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
 }
 .addComment {
   position: absolute;
@@ -85,9 +95,15 @@ export default {
   }
 }
 
-.box{
+.box {
+  flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+}
+
+.top{
+  height: 100px;
+  width: 100%;
 }
 </style>

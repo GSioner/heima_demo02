@@ -131,8 +131,6 @@ export default {
 <style scoped lang="less">
 .comment {
   display: flex;
-  width: 100%;
-  height: 100%;
 
   // ^ --- 左侧评论者头像
   .left {

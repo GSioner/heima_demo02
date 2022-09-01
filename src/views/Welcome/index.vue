@@ -31,7 +31,7 @@ export default {
 // ^ --- 欢迎页面样式配置
 .main {
   width: 100%;
-  height: 100vh;
+  height: 100vmin;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
